@@ -1,0 +1,22 @@
+[0.337s] Invoking command in '/home/renth/mpc_ws/src/demo1/follow_traj': CONDA_PROMPT_MODIFIER=(demo1) PYTHONPATH=/home/renth/mpc_ws/build/follow_traj/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/renth/mpc_ws/install/follow_traj/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../../build/follow_traj build --build-base /home/renth/mpc_ws/build/follow_traj/build install --record /home/renth/mpc_ws/build/follow_traj/install.log --single-version-externally-managed install_data
+[0.462s] running egg_info
+[0.462s] writing ../../../build/follow_traj/follow_traj.egg-info/PKG-INFO
+[0.462s] writing dependency_links to ../../../build/follow_traj/follow_traj.egg-info/dependency_links.txt
+[0.462s] writing entry points to ../../../build/follow_traj/follow_traj.egg-info/entry_points.txt
+[0.462s] writing requirements to ../../../build/follow_traj/follow_traj.egg-info/requires.txt
+[0.462s] writing top-level names to ../../../build/follow_traj/follow_traj.egg-info/top_level.txt
+[0.463s] reading manifest file '../../../build/follow_traj/follow_traj.egg-info/SOURCES.txt'
+[0.464s] writing manifest file '../../../build/follow_traj/follow_traj.egg-info/SOURCES.txt'
+[0.464s] running build
+[0.464s] running build_py
+[0.464s] running install
+[0.464s] running install_lib
+[0.465s] running install_data
+[0.465s] running install_egg_info
+[0.465s] removing '/home/renth/mpc_ws/install/follow_traj/lib/python3.10/site-packages/follow_traj-0.0.0-py3.10.egg-info' (and everything under it)
+[0.466s] Copying ../../../build/follow_traj/follow_traj.egg-info to /home/renth/mpc_ws/install/follow_traj/lib/python3.10/site-packages/follow_traj-0.0.0-py3.10.egg-info
+[0.466s] running install_scripts
+[0.476s] Installing mpc_node script to /home/renth/mpc_ws/install/follow_traj/bin
+[0.476s] Installing simulator_node script to /home/renth/mpc_ws/install/follow_traj/bin
+[0.476s] writing list of installed files to '/home/renth/mpc_ws/build/follow_traj/install.log'
+[0.487s] Invoked command in '/home/renth/mpc_ws/src/demo1/follow_traj' returned '0': CONDA_PROMPT_MODIFIER=(demo1) PYTHONPATH=/home/renth/mpc_ws/build/follow_traj/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/renth/mpc_ws/install/follow_traj/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../../build/follow_traj build --build-base /home/renth/mpc_ws/build/follow_traj/build install --record /home/renth/mpc_ws/build/follow_traj/install.log --single-version-externally-managed install_data

@@ -1,0 +1,16 @@
+Metadata-Version: 2.2
+Name: follow_traj
+Version: 0.0.0
+Summary: TODO: Package description
+Maintainer: hcx
+Maintainer-email: hcx@todo.todo
+License: TODO: License declaration
+Requires-Dist: setuptools
+Provides-Extra: test
+Requires-Dist: pytest; extra == "test"
+Dynamic: license
+Dynamic: maintainer
+Dynamic: maintainer-email
+Dynamic: provides-extra
+Dynamic: requires-dist
+Dynamic: summary

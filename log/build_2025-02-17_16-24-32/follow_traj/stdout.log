@@ -1,0 +1,23 @@
+running egg_info
+writing ../../../build/follow_traj/follow_traj.egg-info/PKG-INFO
+writing dependency_links to ../../../build/follow_traj/follow_traj.egg-info/dependency_links.txt
+writing entry points to ../../../build/follow_traj/follow_traj.egg-info/entry_points.txt
+writing requirements to ../../../build/follow_traj/follow_traj.egg-info/requires.txt
+writing top-level names to ../../../build/follow_traj/follow_traj.egg-info/top_level.txt
+reading manifest file '../../../build/follow_traj/follow_traj.egg-info/SOURCES.txt'
+writing manifest file '../../../build/follow_traj/follow_traj.egg-info/SOURCES.txt'
+running build
+running build_py
+copying follow_traj/simulator_node.py -> /home/renth/mpc_ws/build/follow_traj/build/lib/follow_traj
+running install
+running install_lib
+copying /home/renth/mpc_ws/build/follow_traj/build/lib/follow_traj/simulator_node.py -> /home/renth/mpc_ws/install/follow_traj/lib/python3.10/site-packages/follow_traj
+byte-compiling /home/renth/mpc_ws/install/follow_traj/lib/python3.10/site-packages/follow_traj/simulator_node.py to simulator_node.cpython-310.pyc
+running install_data
+running install_egg_info
+removing '/home/renth/mpc_ws/install/follow_traj/lib/python3.10/site-packages/follow_traj-0.0.0-py3.10.egg-info' (and everything under it)
+Copying ../../../build/follow_traj/follow_traj.egg-info to /home/renth/mpc_ws/install/follow_traj/lib/python3.10/site-packages/follow_traj-0.0.0-py3.10.egg-info
+running install_scripts
+Installing mpc_node script to /home/renth/mpc_ws/install/follow_traj/lib/follow_traj
+Installing simulator_node script to /home/renth/mpc_ws/install/follow_traj/lib/follow_traj
+writing list of installed files to '/home/renth/mpc_ws/build/follow_traj/install.log'

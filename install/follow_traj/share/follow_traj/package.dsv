@@ -1,0 +1,12 @@
+source;share/follow_traj/hook/path.ps1
+source;share/follow_traj/hook/path.dsv
+source;share/follow_traj/hook/path.sh
+source;share/follow_traj/hook/pythonpath.ps1
+source;share/follow_traj/hook/pythonpath.dsv
+source;share/follow_traj/hook/pythonpath.sh
+source;share/follow_traj/hook/pythonscriptspath.ps1
+source;share/follow_traj/hook/pythonscriptspath.dsv
+source;share/follow_traj/hook/pythonscriptspath.sh
+source;share/follow_traj/hook/ament_prefix_path.ps1
+source;share/follow_traj/hook/ament_prefix_path.dsv
+source;share/follow_traj/hook/ament_prefix_path.sh

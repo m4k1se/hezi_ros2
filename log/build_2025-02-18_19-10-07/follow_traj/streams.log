@@ -1,0 +1,32 @@
+[0.316s] Invoking command in '/home/renth/mpc_ws/src/demo1/follow_traj': CONDA_PROMPT_MODIFIER=(demo1) PYTHONPATH=/home/renth/mpc_ws/build/follow_traj/prefix_override:/home/renth/anaconda3/envs/demo1/lib/python3.10/site-packages/colcon_core/task/python/colcon_distutils_commands:/home/renth/mpc_ws/install/follow_traj/lib/python3.10/site-packages:${PYTHONPATH} /home/renth/anaconda3/envs/demo1/bin/python -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../../build/follow_traj build --build-base /home/renth/mpc_ws/build/follow_traj/build install --record /home/renth/mpc_ws/build/follow_traj/install.log --single-version-externally-managed install_data
+[0.391s] /home/renth/anaconda3/envs/demo1/lib/python3.10/site-packages/setuptools/_distutils/dist.py:270: UserWarning: Unknown distribution option: 'tests_require'
+[0.391s]   warnings.warn(msg)
+[0.426s] running egg_info
+[0.431s] writing ../../../build/follow_traj/follow_traj.egg-info/PKG-INFO
+[0.431s] writing dependency_links to ../../../build/follow_traj/follow_traj.egg-info/dependency_links.txt
+[0.431s] writing entry points to ../../../build/follow_traj/follow_traj.egg-info/entry_points.txt
+[0.431s] writing requirements to ../../../build/follow_traj/follow_traj.egg-info/requires.txt
+[0.432s] writing top-level names to ../../../build/follow_traj/follow_traj.egg-info/top_level.txt
+[0.443s] reading manifest file '../../../build/follow_traj/follow_traj.egg-info/SOURCES.txt'
+[0.444s] writing manifest file '../../../build/follow_traj/follow_traj.egg-info/SOURCES.txt'
+[0.444s] running build
+[0.444s] running build_py
+[0.444s] copying follow_traj/simulator_node.py -> /home/renth/mpc_ws/build/follow_traj/build/lib/follow_traj
+[0.444s] copying follow_traj/mpc_node.py -> /home/renth/mpc_ws/build/follow_traj/build/lib/follow_traj
+[0.444s] copying follow_traj/my.py -> /home/renth/mpc_ws/build/follow_traj/build/lib/follow_traj
+[0.444s] copying follow_traj/__init__.py -> /home/renth/mpc_ws/build/follow_traj/build/lib/follow_traj
+[0.444s] running install
+[0.447s] running install_lib
+[0.452s] copying /home/renth/mpc_ws/build/follow_traj/build/lib/follow_traj/simulator_node.py -> /home/renth/mpc_ws/install/follow_traj/lib/python3.10/site-packages/follow_traj
+[0.452s] byte-compiling /home/renth/mpc_ws/install/follow_traj/lib/python3.10/site-packages/follow_traj/simulator_node.py to simulator_node.cpython-310.pyc
+[0.453s] running install_data
+[0.453s] copying resource/follow_traj -> /home/renth/mpc_ws/install/follow_traj/share/ament_index/resource_index/packages
+[0.453s] copying package.xml -> /home/renth/mpc_ws/install/follow_traj/share/follow_traj
+[0.453s] running install_egg_info
+[0.459s] removing '/home/renth/mpc_ws/install/follow_traj/lib/python3.10/site-packages/follow_traj-0.0.0-py3.10.egg-info' (and everything under it)
+[0.459s] Copying ../../../build/follow_traj/follow_traj.egg-info to /home/renth/mpc_ws/install/follow_traj/lib/python3.10/site-packages/follow_traj-0.0.0-py3.10.egg-info
+[0.459s] running install_scripts
+[0.502s] Installing mpc_node script to /home/renth/mpc_ws/install/follow_traj/lib/follow_traj
+[0.502s] Installing simulator_node script to /home/renth/mpc_ws/install/follow_traj/lib/follow_traj
+[0.502s] writing list of installed files to '/home/renth/mpc_ws/build/follow_traj/install.log'
+[0.513s] Invoked command in '/home/renth/mpc_ws/src/demo1/follow_traj' returned '0': CONDA_PROMPT_MODIFIER=(demo1) PYTHONPATH=/home/renth/mpc_ws/build/follow_traj/prefix_override:/home/renth/anaconda3/envs/demo1/lib/python3.10/site-packages/colcon_core/task/python/colcon_distutils_commands:/home/renth/mpc_ws/install/follow_traj/lib/python3.10/site-packages:${PYTHONPATH} /home/renth/anaconda3/envs/demo1/bin/python -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../../build/follow_traj build --build-base /home/renth/mpc_ws/build/follow_traj/build install --record /home/renth/mpc_ws/build/follow_traj/install.log --single-version-externally-managed install_data
