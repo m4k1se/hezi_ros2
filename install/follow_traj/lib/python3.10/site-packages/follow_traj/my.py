@@ -237,14 +237,14 @@ class Simulator:
 class MPCfollower:
     def __init__(self, path):
         self.cx, self.cy, self.cyaw, self.ck = read_csv(path)
-        self.sp = self.calc_speed_profile(TARGET_SPEED)
+        self.target_speed = TARGET_SPEED
+        self.sp = self.calc_speed_profile(self.target_speed)
+        self.episode = 1
         self.oa = None
         self.odelta = None
         self.ai = 0
         self.di = 0
         self.target_ind = 0
-        self.previous_turn_angle = 0
-        self.max_turn_rate = 6
         
     def calc_speed_profile(self, target_speed):
         speed_profile = [target_speed] * len(self.cx)
@@ -331,47 +331,6 @@ class MPCfollower:
         
         return ind, mind
     
-    def calc_ref_trajectory(self, state, dl, pind):
-        xref = np.zeros((NX, T + 1))
-        dref = np.zeros((1, T + 1))
-        ncourse = len(self.cx)
-        ind, _ = self.calc_nearest_index(state, pind)
-        # print("最近点的索引：", ind, pind)
-        if pind >= ind:
-            ind = pind
-        xref[0, 0] = self.cx[ind]
-        xref[1, 0] = self.cy[ind]
-        xref[2, 0] = self.sp[ind]
-        xref[3, 0] = self.cyaw[ind]
-        dref[0, 0] = 0.0  # steer operational point should be 0
-
-        travel = 0.0
-
-        for i in range(T + 1):
-            travel += abs(state.v) * DT  # 累计形式的距离
-            dind = int(round(travel / dl))  # dl是路径点的间隔，travel/dl是当前车辆已经行驶的路径点数
-
-            # if (ind + dind) < ncourse:  #n course是路径点的总数，判断是否超出路径点的总数
-                # xref[0, i] = cx[ind + dind]
-                # xref[1, i] = cy[ind + dind]
-                # xref[2, i] = sp[ind + dind]
-                # xref[3, i] = cyaw[ind + dind]
-                # dref[0, i] = 0.0
-            if (ind + i) < ncourse:
-                xref[0, i] = self.cx[ind + i]
-                xref[1, i] = self.cy[ind + i]
-                xref[2, i] = self.sp[ind + i]
-                xref[3, i] = self.cyaw[ind + i]
-                dref[0, i] = 0.0
-            else:
-                xref[0, i] = self.cx[ncourse - 1]
-                xref[1, i] = self.cy[ncourse - 1]
-                xref[2, i] = self.sp[ncourse - 1]
-                xref[3, i] = self.cyaw[ncourse - 1]
-                dref[0, i] = 0.0
-
-        return xref, ind, dref
-    
     def predict_motion(self, x0, oa, od, xref):
         xbar = xref * 0.0
         for i, _ in enumerate(x0):
@@ -452,38 +411,68 @@ class MPCfollower:
         else:
             print("Error: Cannot solve mpc..")
             oa, odelta, ox, oy, oyaw, ov = None, None, None, None, None, None
-            
+
         return oa, odelta, ox, oy, oyaw, ov
     
-    def smooth_turn_angle(self, turn_angle):
-        angle_diff = turn_angle - self.previous_turn_angle
-        if angle_diff > self.max_turn_rate:
-            update_turn_angle = self.previous_turn_angle + self.max_turn_rate
-        elif angle_diff < -self.max_turn_rate:
-            update_turn_angle = self.previous_turn_angle - self.max_turn_rate
-        else:
-            update_turn_angle = turn_angle
-        print(f"input:{turn_angle}======>update:{update_turn_angle}")
-        self.previous_turn_angle = update_turn_angle
-        return update_turn_angle
+    def calc_ref_trajectory(self, state, dl, pind):
+        xref = np.zeros((NX, T + 1))
+        dref = np.zeros((1, T + 1))
+        ncourse = len(self.cx)
+
+        ind, _ = self.calc_nearest_index(state, pind)
+        # print("最近点的索引：", ind, pind)
+        if pind >= ind:
+            ind = pind
+
+        xref[0, 0] = self.cx[ind]
+        xref[1, 0] = self.cy[ind]
+        xref[2, 0] = self.sp[ind]
+        xref[3, 0] = self.cyaw[ind]
+        dref[0, 0] = 0.0  # steer operational point should be 0
+
+        travel = 0.0
+
+        for i in range(T + 1):
+            travel += abs(state.v) * DT  # 累计形式的距离
+            dind = int(round(travel / dl))  # dl是路径点的间隔，travel/dl是当前车辆已经行驶的路径点数
+
+            # if (ind + dind) < ncourse:  #n course是路径点的总数，判断是否超出路径点的总数
+                # xref[0, i] = cx[ind + dind]
+                # xref[1, i] = cy[ind + dind]
+                # xref[2, i] = sp[ind + dind]
+                # xref[3, i] = cyaw[ind + dind]
+                # dref[0, i] = 0.0
+            if (ind + i) < ncourse:
+                xref[0, i] = self.cx[ind + i]
+                xref[1, i] = self.cy[ind + i]
+                xref[2, i] = self.sp[ind + i]
+                xref[3, i] = self.cyaw[ind + i]
+                dref[0, i] = 0.0
+            else:
+                xref[0, i] = self.cx[ncourse - 1]
+                xref[1, i] = self.cy[ncourse - 1]
+                xref[2, i] = self.sp[ncourse - 1]
+                xref[3, i] = self.cyaw[ncourse - 1]
+                dref[0, i] = 0.0
+
+        return xref, ind, dref
     
     def cal_acc_and_delta(self, state):
-        self.target_ind, _ = self.calc_nearest_index(state, pind=0)
+        if self.episode == 1:
+            self.target_ind, _ = self.calc_nearest_index(state, 0)
         xref, self.target_ind, dref = self.calc_ref_trajectory(state, 1.0, self.target_ind)
         x0 = [state.x, state.y, state.v, state.yaw]
-        self.oa, self.odelta, ox, oy, oyaw, ov = self.iterative_linear_mpc_control(
-            xref, x0, dref, self.oa, self.odelta)
-        
+        self.oa, self.odelta, ox, oy, oyaw, ov = self.iterative_linear_mpc_control(xref, x0, dref, self.oa, self.odelta)
         if self.odelta is not None:
             new_di, self.ai = self.odelta[0], self.oa[0]
-            
-            new_di = math.degrees(new_di)
-            print(f"MPC Output - di: {new_di}, ai: {self.ai}")
-            new_di = max((min(new_di, math.degrees(MAX_STEER))), math.degrees(-MAX_STEER))
-            
-            self.di = self.smooth_turn_angle(new_di * 7.2)
-            print(f"Finlterd Output - di:{self.di}, ai:{self.ai}")
-    
+            self.di = smooth_yaw_iter(self.di, new_di)
+            print(f"di:{self.di}, ai:{self.ai}")
+            # di 大于max，就取max，小于min，就取min
+            if self.di >= MAX_STEER:
+                self.di = MAX_STEER
+            elif self.di <= -MAX_STEER:
+                self.di = -MAX_STEER
+        self.episode += 1
         return self.ai, self.di
         
 class State:

@@ -1,3 +1,4 @@
 [console_scripts]
 mpc_node = follow_traj.mpc_node:main
 simulator_node = follow_traj.simulator_node:main
+

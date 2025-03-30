@@ -1,0 +1,6 @@
+source;share/follow_traj_wd/hook/pythonpath.ps1
+source;share/follow_traj_wd/hook/pythonpath.dsv
+source;share/follow_traj_wd/hook/pythonpath.sh
+source;share/follow_traj_wd/hook/ament_prefix_path.ps1
+source;share/follow_traj_wd/hook/ament_prefix_path.dsv
+source;share/follow_traj_wd/hook/ament_prefix_path.sh

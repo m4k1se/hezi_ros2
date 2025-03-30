@@ -1,4 +1,4 @@
-#!/home/renth/anaconda3/envs/demo1/bin/python
+#!/usr/bin/python3
 # EASY-INSTALL-ENTRY-SCRIPT: 'follow-traj==0.0.0','console_scripts','simulator_node'
 import re
 import sys
