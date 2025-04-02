@@ -1,0 +1,54 @@
+running egg_info
+creating ../../../build/follow_traj_re/follow_traj_re.egg-info
+writing ../../../build/follow_traj_re/follow_traj_re.egg-info/PKG-INFO
+writing dependency_links to ../../../build/follow_traj_re/follow_traj_re.egg-info/dependency_links.txt
+writing entry points to ../../../build/follow_traj_re/follow_traj_re.egg-info/entry_points.txt
+writing requirements to ../../../build/follow_traj_re/follow_traj_re.egg-info/requires.txt
+writing top-level names to ../../../build/follow_traj_re/follow_traj_re.egg-info/top_level.txt
+writing manifest file '../../../build/follow_traj_re/follow_traj_re.egg-info/SOURCES.txt'
+reading manifest file '../../../build/follow_traj_re/follow_traj_re.egg-info/SOURCES.txt'
+writing manifest file '../../../build/follow_traj_re/follow_traj_re.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/renth/mpc_ws/build/follow_traj_re/build
+creating /home/renth/mpc_ws/build/follow_traj_re/build/lib
+creating /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re
+copying follow_traj_re/read_csv.py -> /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re
+copying follow_traj_re/mpc_follower.py -> /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re
+copying follow_traj_re/can_use.py -> /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re
+copying follow_traj_re/send_msg copy.py -> /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re
+copying follow_traj_re/mpc_node.py -> /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re
+copying follow_traj_re/follow_demo_mpc_bank.py -> /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re
+copying follow_traj_re/send_msg.py -> /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re
+copying follow_traj_re/can_node.py -> /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re
+running install
+running install_lib
+creating /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re
+copying /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re/read_csv.py -> /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re
+copying /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re/mpc_follower.py -> /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re
+copying /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re/can_use.py -> /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re
+copying /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re/send_msg copy.py -> /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re
+copying /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re/mpc_node.py -> /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re
+copying /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re/follow_demo_mpc_bank.py -> /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re
+copying /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re/send_msg.py -> /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re
+copying /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re/can_node.py -> /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re
+byte-compiling /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re/read_csv.py to read_csv.cpython-310.pyc
+byte-compiling /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re/mpc_follower.py to mpc_follower.cpython-310.pyc
+byte-compiling /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re/can_use.py to can_use.cpython-310.pyc
+byte-compiling /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re/send_msg copy.py to send_msg copy.cpython-310.pyc
+byte-compiling /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re/mpc_node.py to mpc_node.cpython-310.pyc
+byte-compiling /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re/follow_demo_mpc_bank.py to follow_demo_mpc_bank.cpython-310.pyc
+byte-compiling /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re/send_msg.py to send_msg.cpython-310.pyc
+byte-compiling /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re/can_node.py to can_node.cpython-310.pyc
+running install_data
+creating /home/renth/mpc_ws/install/follow_traj_re/share/ament_index
+creating /home/renth/mpc_ws/install/follow_traj_re/share/ament_index/resource_index
+creating /home/renth/mpc_ws/install/follow_traj_re/share/ament_index/resource_index/packages
+copying resource/follow_traj_re -> /home/renth/mpc_ws/install/follow_traj_re/share/ament_index/resource_index/packages
+copying package.xml -> /home/renth/mpc_ws/install/follow_traj_re/share/follow_traj_re
+running install_egg_info
+Copying ../../../build/follow_traj_re/follow_traj_re.egg-info to /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re-0.0.0-py3.10.egg-info
+running install_scripts
+Installing can_node script to /home/renth/mpc_ws/install/follow_traj_re/lib/follow_traj_re
+Installing follow_node script to /home/renth/mpc_ws/install/follow_traj_re/lib/follow_traj_re
+writing list of installed files to '/home/renth/mpc_ws/build/follow_traj_re/install.log'

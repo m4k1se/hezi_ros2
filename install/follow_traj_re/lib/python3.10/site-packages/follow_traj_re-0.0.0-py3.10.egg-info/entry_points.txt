@@ -1,0 +1,4 @@
+[console_scripts]
+can_node = follow_traj_re.can_node:main
+follow_node = follow_traj_re.mpc_node:main
+
