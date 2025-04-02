@@ -1,4 +1,0 @@
-[0.000000] (-) TimerEvent: {}
-[0.000247] (-) JobUnselected: {'identifier': 'follow_traj'}
-[0.000325] (-) JobUnselected: {'identifier': 'follow_traj_wd'}
-[0.000344] (-) EventReactorShutdown: {}
