@@ -24,7 +24,7 @@ WHEEL_FACTOR = 7.2
 
 NX = 4  # x = x, y, v, yaw
 NU = 2  # a = [accel, steer]
-T = 10  # horizon length
+T = 30  # horizon length
 
 # mpc parameters
 R = np.diag([0.01, 0.01])  # input cost matrix
@@ -67,6 +67,12 @@ def pi_2_pi(angle):
 def get_nparray_from_matrix(x):
     return np.array(x).flatten()
 
+import csv  
+from pyproj import Proj
+import matplotlib.pyplot as plt
+
+lonlat2xy_old = Proj('+proj=tmerc +lon_0=118.8170043 +lat_0=31.8926311 +ellps=WGS84')
+import csv
 def read_csv(csv_file_path): 
     x_coords = []
     y_coords = []
@@ -103,13 +109,6 @@ class Simulator:
         self.follower = follower
     
     def update_state(self, a, delta):
-
-        # input check
-        if delta >= MAX_STEER:
-            delta = MAX_STEER
-        elif delta <= -MAX_STEER:
-            delta = -MAX_STEER
-        
         self.state.x = self.state.x + self.state.v * math.cos(self.state.yaw) * DT
         self.state.y = self.state.y + self.state.v * math.sin(self.state.yaw) * DT
         self.state.yaw = self.state.yaw + self.state.v / WB * math.tan(delta) * DT
@@ -247,6 +246,21 @@ class MPCfollower:
         self.max_turn_rate = 6
         self.all_line_temp = []
         self.ref_line = []
+        self.obs = []
+        self.planning = False
+        self.init_mpc()
+    
+    def init_mpc(self):
+        self.goal = [self.cx[-1], self.cy[-1]]
+        self.state = State(x=self.cx[0], y=self.cy[0], yaw=self.cyaw[0], v=0.0)
+        # initial yaw compensation
+        if self.state.yaw - self.cyaw[0] >= math.pi:
+            self.state.yaw -= math.pi * 2.0
+        elif self.state.yaw - self.cyaw[0] <= -math.pi:
+            self.state.yaw += math.pi * 2.0
+        self.target_ind, _ = self.calc_nearest_index(self.state, 0)
+        self.odelta, self.oa = None, None
+        self.cyaw = self.smooth_yaw(self.cyaw)
         for i in range(len(self.cx)):
             self.all_line_temp.append([
                 self.cx[i],
@@ -255,8 +269,16 @@ class MPCfollower:
                 self.ck[i],
                 self.sp[i]
             ])
-        self.obs = []
-        self.planning = False
+
+    def update_target_index(self, state):
+        self.state.x = state.x
+        self.state.y = state.y
+        # self.state.yaw = math.radians(ego_yaw)
+        self.state.yaw = state.yaw
+        self.state.v = state.v
+        self.state.predelta = 0
+        self.target_ind, _ = self.calc_nearest_index(self.state, 0)
+        print("self target indx",  self.target_ind)
     
     def smooth_yaw(self, yaw):
         for i in range(len(yaw) - 1):
@@ -270,11 +292,11 @@ class MPCfollower:
         return yaw
     
     def normalize_angle_rad(self, angle):
-        two_pi = 2 * math.pi
-        normalized = angle % two_pi
-        if angle < 0 and normalized != 0:
-            normalized -= two_pi
-        return normalized
+        while angle > np.pi:
+            angle -= 2.0 * np.pi
+        while angle < -np.pi:
+            angle += 2.0 * np.pi
+        return angle
     
     def update_local_ref_line(self, state):
         if len(self.all_line_temp) != 0:
@@ -509,7 +531,8 @@ class MPCfollower:
         xref = np.zeros((NX, T + 1))
         dref = np.zeros((NU, T + 1))
         ncourse = len(self.cx)
-        ind, _ = self.calc_nearest_index(state, pind)
+        temp_ind, _ = self.calc_nearest_index(state, pind)
+        ind = temp_ind + 5
         # print("最近点的索引：", ind, pind)
         if pind >= ind:
             ind = pind
@@ -518,7 +541,9 @@ class MPCfollower:
         xref[2, 0] = self.sp[ind]
         xref[3, 0] = self.cyaw[ind]
         dref[1, 0] = math.atan2(WB * self.ck[ind], 1.0)  # 1.0 is just L
-
+        
+        print("xref: "  , xref[0, 0], xref[1, 0], xref[2, 0], xref[3, 0])
+        print("state: " , state.x, state.y, state.v, state.yaw)
         travel = 0.0
 
         for i in range(T + 1):
@@ -642,9 +667,24 @@ class MPCfollower:
         return update_turn_angle
     
     def cal_acc_and_delta(self, state):
-        if state.yaw - self.cyaw[0] >= math.pi:
+
+        def convert_angle(angle):
+            if angle < 0:
+                angle_2 = angle + 360
+                if abs(angle) > abs(angle_2):
+                    return angle_2
+                else:
+                    return angle
+            else:
+                angle_2 = angle-360
+                if abs(angle) >abs(angle_2):
+                    return angle_2
+                else:
+                    return angle
+
+        if state.yaw - self.cyaw[0] > math.pi:
             state.yaw -= math.pi * 2.0
-        elif state.yaw - self.cyaw[0] <= -math.pi:
+        elif state.yaw - self.cyaw[0] < -math.pi:
             state.yaw += math.pi * 2.0
         xref, self.target_ind, dref = self.calc_ref_trajectory(state, 1.0, self.target_ind)
         x0 = [state.x, state.y, state.v, state.yaw]
@@ -663,29 +703,32 @@ class MPCfollower:
         print("o delt",self.odelta)
         print("delta reference:", dref[1])
         
-        plt.plot(ox, oy, c='y', label='mpc_predict')
-        # plt.plot(self.cx, self.cy, c='g')
-        # plt.plot(xref[0],xref[1],c='b')
-        # plt.scatter(state.x, state.y, c='y')
+        plt.figure()
+        plt.plot(ox, oy, c='r')
+        plt.plot(self.cx, self.cy, c='g')
+        plt.plot(xref[0],xref[1],c='b')
+        plt.axis("equal")
+        plt.scatter(self.state.x, self.state.y, c='y')
         plt.scatter(self.cx[self.target_ind], self.cy[self.target_ind], c='b')
-        plt.savefig("prediction_points.png")
+        plt.savefig("prediction_points_bank.png")
         
         if self.odelta is not None:
             self.di, self.ai = self.odelta[0], self.oa[0]
             self.di = self.normalize_angle_rad(self.di)
             print(f"MPC Output - di: {self.di}, ai: {self.ai}")
             self.di = max((min(self.di, MAX_STEER)), -MAX_STEER)
+                        
+            di_deg = math.degrees(self.di)
+            di_deg = convert_angle(di_deg)
+            if di_deg*WHEEL_FACTOR > 460:
+                turn_angle = 460
+            elif di_deg*WHEEL_FACTOR < -460:
+                turn_angle = -460
+            else: 
+                turn_angle = di_deg * WHEEL_FACTOR
+            self.di = self.smooth_turn_angle(-turn_angle)
             
-            # di_deg = math.degrees(self.di)
-            # if di_deg*WHEEL_FACTOR > 400:
-            #     turn_angle = 400
-            # elif di_deg*WHEEL_FACTOR < -400:
-            #     turn_angle = -400
-            # else: 
-            #     turn_angle = di_deg*WHEEL_FACTOR
-            # self.di = self.smooth_turn_angle(-turn_angle)
-            
-            print(f"Fielterd Output - di:{self.di}, ai:{self.ai}")
+            # print(f"Fielterd Output - di:{self.di}, ai:{self.ai}")
     
         return self.ai, self.di
     
@@ -707,6 +750,8 @@ class MPCfollower:
         return math.degrees(angle)
     
     def get_current_observation(self, state, obs_publish: ObsPublish):
+        if obs_publish is None:
+            return
         df_rows = []
         for obj_type in obs_publish:
             for obj_name, obj_info in obs_publish[obj_type].items():
@@ -753,12 +798,12 @@ class MPCfollower:
             print("Cone in the scene")
             data_cone = data_cone.sort_values(by='dis', ascending=True)
             ## 以data_cone的x坐标和y坐标画图
-            plt.plot(data_cone["x"], data_cone["y"], "r*", label="Cone coords")
+            # plt.plot(data_cone["x"], data_cone["y"], "r*", label="Cone coords")
             data_cone = [data_cone.iloc[0]['local_x'], data_cone.iloc[0]['local_y'], 
                          data_cone.iloc[0]['width'], data_cone.iloc[0]['length']]
             if self.planning == False:
-                self.GenerateLaneBorrow(data_cone, state)
-                self.sp = self.calc_speed_profile(TARGET_SPEED)
+                # self.GenerateLaneBorrow(data_cone, state)
+                # self.sp = self.calc_speed_profile(TARGET_SPEED)
                 self.planning = True
         
         ai, di = self.cal_acc_and_delta(state)
