@@ -20,8 +20,8 @@ def main():
     while True:
         # --- vcan0 INS 报文 ---
         # 纬经度 (0x504) 经转换为约118.8171577, 31.8925019
-        lat = int((31.8925895 + 180) / 0.0000001)
-        lon = int((118.8171084 + 180) / 0.0000001)
+        lat = int((31.8922472 + 180) / 0.0000001)
+        lon = int((118.8169888 + 180) / 0.0000001)
         data_504 = [
             (lat >> 24) & 0xFF, (lat >> 16) & 0xFF, (lat >> 8) & 0xFF, lat & 0xFF,
             (lon >> 24) & 0xFF, (lon >> 16) & 0xFF, (lon >> 8) & 0xFF, lon & 0xFF
@@ -36,7 +36,7 @@ def main():
         send_message(bus_ins, 0x505, data_505)
 
         # 航向角（0x502）
-        heading = int((270 + 360) / 0.010986)
+        heading = int((-3.69 + 360) / 0.010986)
         data_502 = [0, 0, 0, 0, (heading >> 8) & 0xFF, heading & 0xFF, 0, 0]
         send_message(bus_ins, 0x502, data_502)
 
@@ -55,7 +55,7 @@ def main():
         data_124 = [0, 0, 0, 0, 0, 0, mode, 0]
         send_message(bus_vcu, 0x124, data_124)
 
-        time.sleep(1)
+        time.sleep(0.5)
 
 if __name__ == "__main__":
     main()

@@ -11,10 +11,12 @@ setup.py
 follow_traj_re/__init__.py
 follow_traj_re/can_node.py
 follow_traj_re/can_use.py
+follow_traj_re/change_node.py
 follow_traj_re/follow_demo_mpc_bank.py
+follow_traj_re/lane_change.py
 follow_traj_re/mpc_follower.py
 follow_traj_re/mpc_node.py
 follow_traj_re/read_csv.py
-follow_traj_re/send_msg copy.py
 follow_traj_re/send_msg.py
+follow_traj_re/test.py
 resource/follow_traj_re

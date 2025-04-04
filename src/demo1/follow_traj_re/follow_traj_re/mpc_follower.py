@@ -197,38 +197,6 @@ class Simulator:
                     + ", speed[km/h]:" + str(round(self.state.v * 3.6, 2)))
             plt.legend()
             plt.pause(0.0001)
-                    
-class ObsItem:
-    def __init__(self, x=0, y=0, v=0, yaw=0, width=0, length=0):
-        self.x = x
-        self.y = y
-        self.v = v
-        self.yaw = yaw
-        self.width = width
-        self.length = length
-
-class ObsPublish:
-    def __init__(self):
-        # 每个障碍物以 ObsItem 形式存储
-        self.obs_dict = {
-            "cone": {
-                "12345": ObsItem(x=0.0, 
-                                 y=9.0, 
-                                 v=0, 
-                                 yaw=1.68, 
-                                 width=2, 
-                                 length=2),
-            },
-            "pedestrain": {},
-            "vehicle": {},
-            "bycicle": {}
-        }
-
-    def __iter__(self):
-        return iter(self.obs_dict)
-
-    def __getitem__(self, key):
-        return self.obs_dict[key]
 
 class MPCfollower:
     def __init__(self, path):
@@ -247,8 +215,6 @@ class MPCfollower:
         self.obs = []
         self.planning = False
         self.init_mpc()
-        self.decider = LaneChangeDecider(path)
-        self.decider.init_refline()
     
     def init_mpc(self):
         self.goal = [self.cx[-1], self.cy[-1]]
@@ -398,21 +364,22 @@ class MPCfollower:
         xref[3, 0] = self.cyaw[ind]
         dref[1, 0] = math.atan2(WB * self.ck[ind], 1.0)  # 1.0 is just L
         
-        print("xref: "  , xref[0, 0], xref[1, 0], xref[2, 0], xref[3, 0])
-        print("state: " , state.x, state.y, state.v, state.yaw)
+        # print("xref: "  , xref[0, 0], xref[1, 0], xref[2, 0], xref[3, 0])
+        # print("state: " , state.x, state.y, state.v, state.yaw)
         travel = 0.0
 
         for i in range(T + 1):
             travel += abs(state.v) * DT  # 累计形式的距离
             dind = int(round(travel / dl))  # dl是路径点的间隔，travel/dl是当前车辆已经行驶的路径点数
 
-            if (ind + dind) < ncourse:  #n course是路径点的总数，判断是否超出路径点的总数
+            # if (ind + dind) < ncourse:  #n course是路径点的总数，判断是否超出路径点的总数
                 # xref[0, i] = cx[ind + dind]
                 # xref[1, i] = cy[ind + dind]
                 # xref[2, i] = sp[ind + dind]
                 # xref[3, i] = cyaw[ind + dind]
                 # dref[0, i] = 0.0
-            # if (ind + i) < ncourse:
+            if (ind + i) < ncourse:
+                # print(len(self.cx), ind, i, ncourse)
                 xref[0, i] = self.cx[ind + i]
                 xref[1, i] = self.cy[ind + i]
                 xref[2, i] = self.sp[ind + i]
@@ -545,17 +512,17 @@ class MPCfollower:
         self.oa, self.odelta, ox, oy, oyaw, ov = self.iterative_linear_mpc_control(
             xref, x0, dref, self.oa, self.odelta)
         
-        print("x0:         ", x0)
-        print("ox:         ", ox)
-        print("x reference:", xref[0])
-        print("oy: ", oy)
-        print("y reference:", xref[1])
-        print("oyaw: ", oyaw)
-        print("yaw reference:", xref[3])
-        print("ov: ", ov)
-        print("v reference:", xref[2])
-        print("o delt",self.odelta)
-        print("delta reference:", dref[1])
+        # print("x0:         ", x0)
+        # print("ox:         ", ox)
+        # print("x reference:", xref[0])
+        # print("oy: ", oy)
+        # print("y reference:", xref[1])
+        # print("oyaw: ", oyaw)
+        # print("yaw reference:", xref[3])
+        # print("ov: ", ov)
+        # print("v reference:", xref[2])
+        # print("o delt",self.odelta)
+        # print("delta reference:", dref[1])
         
         plt.plot(ox, oy, c='r')
         plt.plot(self.cx, self.cy, c='g')
@@ -563,7 +530,7 @@ class MPCfollower:
         plt.axis("equal")
         plt.scatter(self.state.x, self.state.y, c='y')
         plt.scatter(self.cx[self.target_ind], self.cy[self.target_ind], c='b')
-        # plt.savefig("prediction_points_bank.png")
+        plt.savefig("prediction_points_bank.png")
         
         if self.odelta is not None:
             self.di, self.ai = self.odelta[0], self.oa[0]
@@ -585,10 +552,8 @@ class MPCfollower:
     
         return self.ai, self.di
      
-    def act(self, state, obs_publish: ObsPublish):
+    def act(self, state):
         plt.cla()
-        self.decider.update_state(state, obs_publish)
-        self.cx, self.cy, self.cyaw, self.ck, self.sp = self.decider.publish_new_refline()
         # self.GenerateLaneBorrow(data_cone, state)
         # self.sp = self.calc_speed_profile(TARGET_SPEED)
         ai, di = self.cal_acc_and_delta(state)
@@ -610,7 +575,8 @@ def main():
     start = time.time()
     
     mpc = MPCfollower(r'/home/renth/follow_trajectory/collect_trajectory/processed_straight12_17_with_yaw_ck.csv')
-    obs_publish = ObsPublish()
+    decider = LaneChangeDecider(r'/home/renth/follow_trajectory/collect_trajectory/processed_straight12_17_with_yaw_ck.csv')
+    obs_publish = [[0, 20, 0, 0, 0, 0, 0]]
     start_x = mpc.cx[0]
     start_y = mpc.cy[0]
     start_yaw = mpc.cyaw[0]
@@ -618,7 +584,9 @@ def main():
     sim = Simulator(initial_state, mpc)
     
     for i in range(500):
-        ai, di = mpc.act(sim.state, obs_publish)
+        decider.update_state(initial_state, obs_publish)
+        mpc.cx, mpc.cy, mpc.cyaw, mpc.ck, mpc.sp = decider.publish_new_refline()
+        ai, di = mpc.act(sim.state)
         sim.do_simulation(ai, di, mpc.cx, mpc.cy, mpc.cyaw, mpc.target_ind)
 
 

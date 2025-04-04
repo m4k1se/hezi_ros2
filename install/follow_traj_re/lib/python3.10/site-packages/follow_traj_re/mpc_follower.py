@@ -16,6 +16,7 @@ import csv
 from pyproj import Proj
 from dataclasses import dataclass
 import pandas as pd
+from lane_change import LaneChangeDecider
 sys.path.append(str(pathlib.Path(__file__).parent.parent.parent))
 
 # from utils.angle import angle_mod
@@ -67,12 +68,9 @@ def pi_2_pi(angle):
 def get_nparray_from_matrix(x):
     return np.array(x).flatten()
 
-import csv  
 from pyproj import Proj
-import matplotlib.pyplot as plt
 
 lonlat2xy_old = Proj('+proj=tmerc +lon_0=118.8170043 +lat_0=31.8926311 +ellps=WGS84')
-import csv
 def read_csv(csv_file_path): 
     x_coords = []
     y_coords = []
@@ -199,38 +197,6 @@ class Simulator:
                     + ", speed[km/h]:" + str(round(self.state.v * 3.6, 2)))
             plt.legend()
             plt.pause(0.0001)
-                    
-class ObsItem:
-    def __init__(self, x=0, y=0, v=0, yaw=0, width=0, length=0):
-        self.x = x
-        self.y = y
-        self.v = v
-        self.yaw = yaw
-        self.width = width
-        self.length = length
-
-class ObsPublish:
-    def __init__(self):
-        # 每个障碍物以 ObsItem 形式存储
-        self.obs_dict = {
-            "cone": {
-                "12345": ObsItem(x=671835.2, 
-                                 y=3529951.1, 
-                                 v=0, 
-                                 yaw=1.68, 
-                                 width=2, 
-                                 length=2),
-            },
-            "pedestrain": {},
-            "vehicle": {},
-            "bycicle": {}
-        }
-
-    def __iter__(self):
-        return iter(self.obs_dict)
-
-    def __getitem__(self, key):
-        return self.obs_dict[key]
 
 class MPCfollower:
     def __init__(self, path):
@@ -297,150 +263,6 @@ class MPCfollower:
         while angle < -np.pi:
             angle += 2.0 * np.pi
         return angle
-    
-    def update_local_ref_line(self, state):
-        if len(self.all_line_temp) != 0:
-            for j in range(len(self.all_line_temp)):
-                new_x, new_y, new_yaw = self.utm2localxy(state, self.all_line_temp[j][0], self.all_line_temp[j][1])
-                self.ref_line.append([new_x, new_y, new_yaw, self.all_line_temp[j][3]])
-        
-    def localxy2utm(self, point, state):
-        x = point[0]
-        y = point[1]
-        local_yaw = point[2]
-        heading_rad = math.pi/2 - state.yaw
-        dx = x * math.cos(heading_rad) + y * math.sin(heading_rad)
-        dy = -x * math.sin(heading_rad) + y * math.cos(heading_rad)
-        utm_e = state.x + dx
-        utm_n = state.y + dy
-        # 将局部航向转换到全局航向
-        # global_yaw = local_yaw + (math.pi/2 - state.yaw)
-        global_yaw = local_yaw - (math.pi/2 - state.yaw)
-        # 将角度归一化到(-π, π)
-        # global_yaw = (global_yaw + math.pi) % (2 * math.pi) - math.pi
-        return [utm_e, utm_n, global_yaw, point[3]]
-    
-    def utm2localxy(self, state, point_x, point_y):
-        det_x = point_x - state.x
-        det_y = point_y - state.y
-        distance = math.sqrt(det_x ** 2 + det_y ** 2)
-        angle_line = math.atan2(det_y, det_x)
-        angle = (angle_line - state.yaw + math.pi / 2)
-        new_x = distance * math.cos(angle)
-        new_y = distance * math.sin(angle)
-        return new_x, new_y, angle
-    
-    def GenerateLaneBorrow(self, obs, state):
-        print("obs:", obs)
-        
-        """lane borrow"""
-        # [x, y, width, length]
-        if len(obs) == 0:
-            return
-        self.history_line = []
-        index1, index2 = -1, -1
-        for i in range(len(self.ref_line)):
-            if index1 == -1 and self.ref_line[i][1] >= obs[1] - obs[3] / 2 - 10:
-                index1 = i
-            if index2 == -1 and self.ref_line[i][1] >= obs[1] + obs[3] / 2 + 10:
-                index2 = i
-                break
-        if index1 == -1 or index2 == -1:
-            return
-        point0 = [self.ref_line[index1][0], self.ref_line[index1][1]]
-        point1 = [obs[0] - obs[2], obs[1] - obs[3] / 2]
-        point2 = [obs[0] - obs[2], obs[1] + obs[3] / 2]
-        point3 = [self.ref_line[index2][0], self.ref_line[index2][1]]
-
-        b_line1 = self.generate_bezier(point0, point1)
-        b_line2 = self.generate_bezier(point1, point2)
-        b_line3 = self.generate_bezier(point2, point3)
-
-        # montage
-        b_line_all = []
-        b_line_all.extend(b_line1)
-        b_line_all.extend(b_line2)
-        b_line_all.extend(b_line3)
-
-        for one_s_point in b_line_all:
-            new_one_point = self.localxy2utm(one_s_point, state)
-            self.history_line.append([new_one_point[0], new_one_point[1],
-                                     new_one_point[2], one_s_point[3]])
-        history_x = [point[0] for point in self.history_line]
-        history_y = [point[1] for point in self.history_line]
-        history_yaw = [point[2] for point in self.history_line]
-
-        self.cx = self.cx[:index1] + history_x + self.cx[index2:]
-        self.cy = self.cy[:index1] + history_y + self.cy[index2:]
-        self.cyaw = self.cyaw[:index1] + history_yaw + self.cyaw[index2:]
-        print("a")
-        # df = pd.DataFrame(self.all_line_temp, columns=['x', 'y', 'yaw', 'v', 'length'])
-        # df.to_csv('all_line.csv', index=False)
-
-    def generate_bezier(self, point0, point1):
-        b_line = []
-        first_control_point_para_ = 0.3
-        second_control_point_para_ = 0.4
-        y = point1[1] - point0[1]
-        CtrlPointX = [0, 0, 0, 0]
-        CtrlPointY = [0, 0, 0, 0]
-        CtrlPointX[0] = point0[0]
-        CtrlPointY[0] = point0[1]
-        CtrlPointX[3] = point1[0]
-        CtrlPointY[3] = point1[1]
-        CtrlPointX[1] = CtrlPointX[0]
-        CtrlPointY[1] = y * first_control_point_para_ + point0[1]
-        CtrlPointX[2] = CtrlPointX[3]
-        CtrlPointY[2] = y * second_control_point_para_ + point0[1]
-        Pos = round(y / 1.0)
-        for i in range(Pos, 0, -1):
-            tempx = self.bezier3func(i / Pos, CtrlPointX)
-            tempy = self.bezier3func(i / Pos, CtrlPointY)
-            angle, curvature = self.cal_angle_curvature(i / Pos, CtrlPointX, CtrlPointY)
-            if angle > 2 * math.pi:
-                angle = angle - 2 * math.pi
-            elif angle < 0:
-                angle = angle + 2 * math.pi
-            b_point = [tempx, tempy, angle, curvature]
-            b_line.append(b_point)
-        return b_line
-    
-    def bezier3func(self, _t, controlP):
-        part0 = controlP[0] * _t * _t * _t
-        part1 = 3 * controlP[1] * _t * _t * (1 - _t)
-        part2 = 3 * controlP[2] * _t * (1 - _t) * (1 - _t)
-        part3 = controlP[3] * (1 - _t) * (1 - _t) * (1 - _t)
-        return part0 + part1 + part2 + part3
-    
-    def cal_angle_curvature(self, _t, controlP_x, controlP_y):
-        _dx_1 = 3 * controlP_x[0] * _t * _t
-        _dx_2 = 3 * controlP_x[1] * (_t * 2 - 3 * _t * _t)
-        _dx_3 = 3 * controlP_x[2] * (1 - 4 * _t + 3 * _t * _t)
-        _dx_4 = -3 * controlP_x[3] * (1 - _t) * (1 - _t)
-        _dy_1 = 3 * controlP_y[0] * _t * _t
-        _dy_2 = 3 * controlP_y[1] * (_t * 2 - 3 * _t * _t)
-        _dy_3 = 3 * controlP_y[2] * (1 - 4 * _t + 3 * _t * _t)
-        _dy_4 = -3 * controlP_y[3] * (1 - _t) * (1 - _t)
-        
-        dx = _dx_1 + _dx_2 + _dx_3 + _dx_4
-        dy = _dy_1 + _dy_2 + _dy_3 + _dy_4
-        
-        _ddx_1 = 6 * controlP_x[0] * _t
-        _ddx_2 = 6 * controlP_x[1] * (2 - 6 * _t)
-        _ddx_3 = 6 * controlP_x[2] * (3 - 8 * _t)
-        _ddx_4 = -6 * controlP_x[3] * (1 - _t)
-        _ddy_1 = 6 * controlP_y[0] * _t
-        _ddy_2 = 6 * controlP_y[1] * (2 - 6 * _t)
-        _ddy_3 = 6 * controlP_y[2] * (3 - 8 * _t)
-        _ddy_4 = -6 * controlP_y[3] * (1 - _t)
-        
-        ddx = _ddx_1 + _ddx_2 + _ddx_3 + _ddx_4
-        ddy = _ddy_1 + _ddy_2 + _ddy_3 + _ddy_4
-        
-        angle = math.atan2(-dy, -dx)
-        curvature = abs(dx * ddy - dy * ddx) / ((dx ** 2 + dy ** 2) ** 1.5)
-        
-        return angle, curvature
         
     def calc_speed_profile(self, target_speed):
         speed_profile = [target_speed] * len(self.cx)
@@ -532,7 +354,7 @@ class MPCfollower:
         dref = np.zeros((NU, T + 1))
         ncourse = len(self.cx)
         temp_ind, _ = self.calc_nearest_index(state, pind)
-        ind = temp_ind + 5
+        ind = temp_ind
         # print("最近点的索引：", ind, pind)
         if pind >= ind:
             ind = pind
@@ -542,21 +364,22 @@ class MPCfollower:
         xref[3, 0] = self.cyaw[ind]
         dref[1, 0] = math.atan2(WB * self.ck[ind], 1.0)  # 1.0 is just L
         
-        print("xref: "  , xref[0, 0], xref[1, 0], xref[2, 0], xref[3, 0])
-        print("state: " , state.x, state.y, state.v, state.yaw)
+        # print("xref: "  , xref[0, 0], xref[1, 0], xref[2, 0], xref[3, 0])
+        # print("state: " , state.x, state.y, state.v, state.yaw)
         travel = 0.0
 
         for i in range(T + 1):
             travel += abs(state.v) * DT  # 累计形式的距离
             dind = int(round(travel / dl))  # dl是路径点的间隔，travel/dl是当前车辆已经行驶的路径点数
 
-            if (ind + dind) < ncourse:  #n course是路径点的总数，判断是否超出路径点的总数
+            # if (ind + dind) < ncourse:  #n course是路径点的总数，判断是否超出路径点的总数
                 # xref[0, i] = cx[ind + dind]
                 # xref[1, i] = cy[ind + dind]
                 # xref[2, i] = sp[ind + dind]
                 # xref[3, i] = cyaw[ind + dind]
                 # dref[0, i] = 0.0
-            # if (ind + i) < ncourse:
+            if (ind + i) < ncourse:
+                # print(len(self.cx), ind, i, ncourse)
                 xref[0, i] = self.cx[ind + i]
                 xref[1, i] = self.cy[ind + i]
                 xref[2, i] = self.sp[ind + i]
@@ -667,7 +490,6 @@ class MPCfollower:
         return update_turn_angle
     
     def cal_acc_and_delta(self, state):
-
         def convert_angle(angle):
             if angle < 0:
                 angle_2 = angle + 360
@@ -681,7 +503,6 @@ class MPCfollower:
                     return angle_2
                 else:
                     return angle
-
         if state.yaw - self.cyaw[0] > math.pi:
             state.yaw -= math.pi * 2.0
         elif state.yaw - self.cyaw[0] < -math.pi:
@@ -691,19 +512,18 @@ class MPCfollower:
         self.oa, self.odelta, ox, oy, oyaw, ov = self.iterative_linear_mpc_control(
             xref, x0, dref, self.oa, self.odelta)
         
-        print("x0:         ", x0)
-        print("ox:         ", ox)
-        print("x reference:", xref[0])
-        print("oy: ", oy)
-        print("y reference:", xref[1])
-        print("oyaw: ", oyaw)
-        print("yaw reference:", xref[3])
-        print("ov: ", ov)
-        print("v reference:", xref[2])
-        print("o delt",self.odelta)
-        print("delta reference:", dref[1])
+        # print("x0:         ", x0)
+        # print("ox:         ", ox)
+        # print("x reference:", xref[0])
+        # print("oy: ", oy)
+        # print("y reference:", xref[1])
+        # print("oyaw: ", oyaw)
+        # print("yaw reference:", xref[3])
+        # print("ov: ", ov)
+        # print("v reference:", xref[2])
+        # print("o delt",self.odelta)
+        # print("delta reference:", dref[1])
         
-        plt.figure()
         plt.plot(ox, oy, c='r')
         plt.plot(self.cx, self.cy, c='g')
         plt.plot(xref[0],xref[1],c='b')
@@ -718,94 +538,24 @@ class MPCfollower:
             print(f"MPC Output - di: {self.di}, ai: {self.ai}")
             self.di = max((min(self.di, MAX_STEER)), -MAX_STEER)
                         
-            di_deg = math.degrees(self.di)
-            di_deg = convert_angle(di_deg)
-            if di_deg*WHEEL_FACTOR > 460:
-                turn_angle = 460
-            elif di_deg*WHEEL_FACTOR < -460:
-                turn_angle = -460
-            else: 
-                turn_angle = di_deg * WHEEL_FACTOR
-            self.di = self.smooth_turn_angle(-turn_angle)
+            # di_deg = math.degrees(self.di)
+            # di_deg = convert_angle(di_deg)
+            # if di_deg*WHEEL_FACTOR > 460:
+            #     turn_angle = 460
+            # elif di_deg*WHEEL_FACTOR < -460:
+            #     turn_angle = -460
+            # else: 
+            #     turn_angle = di_deg * WHEEL_FACTOR
+            # self.di = self.smooth_turn_angle(-turn_angle)
             
             # print(f"Fielterd Output - di:{self.di}, ai:{self.ai}")
     
         return self.ai, self.di
-    
-    def calculate_angle_between_vectors(self, v1, v2):
-        dot_product = v1[0] * v2[0] + v1[1] * v2[1]
-        # 计算两个向量的模长
-        norm_v1 = math.sqrt(v1[0] ** 2 + v1[1] ** 2)
-        norm_v2 = math.sqrt(v2[0] ** 2 + v2[1] ** 2)
-        # 计算夹角的余弦值
-        cos_angle = dot_product / (norm_v1 * norm_v2)
-        cos_angle = max(min(cos_angle, 1), -1)
-        # 将余弦值转换为角度
-        if cos_angle == 1:
-            return 0
-        elif cos_angle == -1:
-            return 180
-        else:
-            angle = math.acos(cos_angle)
-        return math.degrees(angle)
-    
-    def get_current_observation(self, state, obs_publish: ObsPublish):
-        if obs_publish is None:
-            return
-        df_rows = []
-        for obj_type in obs_publish:
-            for obj_name, obj_info in obs_publish[obj_type].items():
-                obj_x = obj_info.x
-                obj_y = obj_info.y
-                dx = obj_x - state.x
-                dy = obj_y - state.y
-                ego_angle = [math.cos(state.yaw), math.sin(state.yaw)]
-                relative_angle = [dx, dy]
-                tag = self.calculate_angle_between_vectors(ego_angle, relative_angle)
-                if 0 <= tag <= 90:
-                    local_x, local_y, _= self.utm2localxy(state, obj_x, obj_y)
-                    dis = math.sqrt(local_x**2 + local_y**2)
-                    df_rows.append({
-                        "type": obj_type,
-                        "id": obj_name,
-                        "x": obj_x,
-                        "y": obj_y,
-                        "v": obj_info.v,
-                        "dis": dis,
-                        "local_x": local_x,
-                        "local_y": local_y,
-                        "yaw": obj_info.yaw,
-                        "tag": tag,
-                        "width": obj_info.width,
-                        "length": obj_info.length
-                    })
-        self.obs = pd.DataFrame(df_rows)  # 直接转换为 DataFrame 存储
-    
-    def act(self, state, obs_publish: ObsPublish):
+     
+    def act(self, state):
         plt.cla()
-        self.update_local_ref_line(state)
-        self.get_current_observation(state, obs_publish)
-        data_cone = []
-        if len(self.obs) != 0:
-            data_cone = self.obs[self.obs['type'] == 'cone']
-            data_pedestrain = self.obs[self.obs['type'] == 'pedestrain']
-            data_vehicle = self.obs[self.obs['type'] == 'vehicle']
-            data_bycicle = self.obs[self.obs['type'] == 'bycicle']
-        if len(data_cone) == 0:
-            print("No cone in the scene")
-            self.planning = False
-        else:
-            print("Cone in the scene")
-            data_cone = data_cone.sort_values(by='dis', ascending=True)
-            ## 以data_cone的x坐标和y坐标画图
-            # plt.plot(data_cone["x"], data_cone["y"], "r*", label="Cone coords")
-            data_cone = [data_cone.iloc[0]['local_x'], data_cone.iloc[0]['local_y'], 
-                         data_cone.iloc[0]['width'], data_cone.iloc[0]['length']]
-            if self.planning == False:
-                # self.GenerateLaneBorrow(data_cone, state)
-                # self.sp = self.calc_speed_profile(TARGET_SPEED)
-                self.planning = True
-        
+        # self.GenerateLaneBorrow(data_cone, state)
+        # self.sp = self.calc_speed_profile(TARGET_SPEED)
         ai, di = self.cal_acc_and_delta(state)
         return ai, di
         
@@ -825,16 +575,18 @@ def main():
     start = time.time()
     
     mpc = MPCfollower(r'/home/renth/follow_trajectory/collect_trajectory/processed_straight12_17_with_yaw_ck.csv')
-    obs_publish = ObsPublish()
+    decider = LaneChangeDecider(r'/home/renth/follow_trajectory/collect_trajectory/processed_straight12_17_with_yaw_ck.csv')
+    obs_publish = [[0, 20, 0, 0, 0, 0, 0]]
     start_x = mpc.cx[0]
     start_y = mpc.cy[0]
     start_yaw = mpc.cyaw[0]
     initial_state = State(x=start_x, y=start_y, yaw=start_yaw, v=0.0)
     sim = Simulator(initial_state, mpc)
-    plt.figure()
     
     for i in range(500):
-        ai, di = mpc.act(sim.state, obs_publish)
+        decider.update_state(initial_state, obs_publish)
+        mpc.cx, mpc.cy, mpc.cyaw, mpc.ck, mpc.sp = decider.publish_new_refline()
+        ai, di = mpc.act(sim.state)
         sim.do_simulation(ai, di, mpc.cx, mpc.cy, mpc.cyaw, mpc.target_ind)
 
 

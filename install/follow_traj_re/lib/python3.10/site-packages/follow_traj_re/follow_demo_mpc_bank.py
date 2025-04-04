@@ -463,7 +463,6 @@ class VehicleTrajectoryFollower:
                 xref[1, i] = cy[ind + i]
                 xref[2, i] = sp[ind + i]
                 xref[3, i] = cyaw[ind + i]
-                dref[0, i] = 0.0
                 dref[0, i] = self.calculate_reference_steer(state, cyaw[ind + dind])
             else:
                 xref[0, i] = cx[ncourse - 1]

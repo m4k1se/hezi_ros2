@@ -1,0 +1,43 @@
+[0.324s] Invoking command in '/home/renth/mpc_ws/src/demo1/follow_traj_re': CONDA_PROMPT_MODIFIER=(demo1) PYTHONPATH=/home/renth/mpc_ws/build/follow_traj_re/prefix_override:/home/renth/anaconda3/envs/demo1/lib/python3.10/site-packages/colcon_core/task/python/colcon_distutils_commands:/home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages:${PYTHONPATH} /home/renth/anaconda3/envs/demo1/bin/python -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../../build/follow_traj_re build --build-base /home/renth/mpc_ws/build/follow_traj_re/build install --record /home/renth/mpc_ws/build/follow_traj_re/install.log --single-version-externally-managed install_data
+[0.431s] running egg_info
+[0.432s] writing ../../../build/follow_traj_re/follow_traj_re.egg-info/PKG-INFO
+[0.432s] writing dependency_links to ../../../build/follow_traj_re/follow_traj_re.egg-info/dependency_links.txt
+[0.432s] writing entry points to ../../../build/follow_traj_re/follow_traj_re.egg-info/entry_points.txt
+[0.432s] writing requirements to ../../../build/follow_traj_re/follow_traj_re.egg-info/requires.txt
+[0.432s] writing top-level names to ../../../build/follow_traj_re/follow_traj_re.egg-info/top_level.txt
+[0.433s] reading manifest file '../../../build/follow_traj_re/follow_traj_re.egg-info/SOURCES.txt'
+[0.433s] writing manifest file '../../../build/follow_traj_re/follow_traj_re.egg-info/SOURCES.txt'
+[0.433s] running build
+[0.433s] running build_py
+[0.433s] copying follow_traj_re/change_node.py -> /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re
+[0.434s] copying follow_traj_re/mpc_follower.py -> /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re
+[0.434s] copying follow_traj_re/test.py -> /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re
+[0.434s] copying follow_traj_re/mpc_node.py -> /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re
+[0.434s] copying follow_traj_re/follow_demo_mpc_bank.py -> /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re
+[0.434s] copying follow_traj_re/can_node.py -> /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re
+[0.434s] copying follow_traj_re/lane_change.py -> /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re
+[0.434s] running install
+[0.434s] running install_lib
+[0.434s] copying /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re/change_node.py -> /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re
+[0.434s] copying /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re/mpc_follower.py -> /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re
+[0.435s] copying /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re/test.py -> /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re
+[0.435s] copying /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re/mpc_node.py -> /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re
+[0.435s] copying /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re/follow_demo_mpc_bank.py -> /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re
+[0.435s] copying /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re/can_node.py -> /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re
+[0.435s] copying /home/renth/mpc_ws/build/follow_traj_re/build/lib/follow_traj_re/lane_change.py -> /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re
+[0.435s] byte-compiling /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re/change_node.py to change_node.cpython-310.pyc
+[0.436s] byte-compiling /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re/mpc_follower.py to mpc_follower.cpython-310.pyc
+[0.438s] byte-compiling /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re/test.py to test.cpython-310.pyc
+[0.438s] byte-compiling /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re/mpc_node.py to mpc_node.cpython-310.pyc
+[0.438s] byte-compiling /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re/follow_demo_mpc_bank.py to follow_demo_mpc_bank.cpython-310.pyc
+[0.440s] byte-compiling /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re/can_node.py to can_node.cpython-310.pyc
+[0.440s] byte-compiling /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re/lane_change.py to lane_change.cpython-310.pyc
+[0.441s] running install_data
+[0.441s] running install_egg_info
+[0.442s] removing '/home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re-0.0.0-py3.10.egg-info' (and everything under it)
+[0.442s] Copying ../../../build/follow_traj_re/follow_traj_re.egg-info to /home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages/follow_traj_re-0.0.0-py3.10.egg-info
+[0.443s] running install_scripts
+[0.452s] Installing can_node script to /home/renth/mpc_ws/install/follow_traj_re/lib/follow_traj_re
+[0.452s] Installing follow_node script to /home/renth/mpc_ws/install/follow_traj_re/lib/follow_traj_re
+[0.452s] writing list of installed files to '/home/renth/mpc_ws/build/follow_traj_re/install.log'
+[0.462s] Invoked command in '/home/renth/mpc_ws/src/demo1/follow_traj_re' returned '0': CONDA_PROMPT_MODIFIER=(demo1) PYTHONPATH=/home/renth/mpc_ws/build/follow_traj_re/prefix_override:/home/renth/anaconda3/envs/demo1/lib/python3.10/site-packages/colcon_core/task/python/colcon_distutils_commands:/home/renth/mpc_ws/install/follow_traj_re/lib/python3.10/site-packages:${PYTHONPATH} /home/renth/anaconda3/envs/demo1/bin/python -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../../build/follow_traj_re build --build-base /home/renth/mpc_ws/build/follow_traj_re/build install --record /home/renth/mpc_ws/build/follow_traj_re/install.log --single-version-externally-managed install_data
