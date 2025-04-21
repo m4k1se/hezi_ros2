@@ -1,0 +1,80 @@
+[0.335s] Invoking command in '/home/renth/mpc_ws/src/demo1/follow_traj_wd': CONDA_PROMPT_MODIFIER=(demo1) PYTHONPATH=/home/renth/mpc_ws/build/follow_traj_wd/prefix_override:/home/renth/anaconda3/envs/demo1/lib/python3.10/site-packages/colcon_core/task/python/colcon_distutils_commands:/home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages:${PYTHONPATH} /home/renth/anaconda3/envs/demo1/bin/python3.10 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../../build/follow_traj_wd build --build-base /home/renth/mpc_ws/build/follow_traj_wd/build install --record /home/renth/mpc_ws/build/follow_traj_wd/install.log --single-version-externally-managed install_data
+[0.442s] running egg_info
+[0.442s] writing ../../../build/follow_traj_wd/follow_traj_wd.egg-info/PKG-INFO
+[0.442s] writing dependency_links to ../../../build/follow_traj_wd/follow_traj_wd.egg-info/dependency_links.txt
+[0.442s] writing entry points to ../../../build/follow_traj_wd/follow_traj_wd.egg-info/entry_points.txt
+[0.442s] writing requirements to ../../../build/follow_traj_wd/follow_traj_wd.egg-info/requires.txt
+[0.443s] writing top-level names to ../../../build/follow_traj_wd/follow_traj_wd.egg-info/top_level.txt
+[0.443s] reading manifest file '../../../build/follow_traj_wd/follow_traj_wd.egg-info/SOURCES.txt'
+[0.444s] writing manifest file '../../../build/follow_traj_wd/follow_traj_wd.egg-info/SOURCES.txt'
+[0.444s] running build
+[0.444s] running build_py
+[0.444s] copying follow_traj_wd/can_node_hybrid.py -> /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd
+[0.444s] copying follow_traj_wd/read_csv.py -> /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd
+[0.444s] copying follow_traj_wd/can_use.py -> /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd
+[0.444s] copying follow_traj_wd/utils.py -> /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd
+[0.444s] copying follow_traj_wd/publish_trajectory_node.py -> /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd
+[0.444s] copying follow_traj_wd/visualization_node.py -> /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd
+[0.444s] copying follow_traj_wd/hybrid_follow_node.py -> /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd
+[0.444s] copying follow_traj_wd/switch_trajectory.py -> /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd
+[0.444s] copying follow_traj_wd/lane_change_vx.py -> /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd
+[0.444s] copying follow_traj_wd/follow_node.py -> /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd
+[0.444s] copying follow_traj_wd/follow_demo_2025.py -> /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd
+[0.445s] copying follow_traj_wd/mpc_node_v2.py -> /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd
+[0.445s] copying follow_traj_wd/follow_demo_mpc_bank.py -> /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd
+[0.445s] copying follow_traj_wd/can_node.py -> /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd
+[0.445s] copying follow_traj_wd/lane_change.py -> /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd
+[0.445s] copying follow_traj_wd/__init__.py -> /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd
+[0.445s] copying follow_traj_wd/adjust_trajectory_node.py -> /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd
+[0.445s] running install
+[0.445s] running install_lib
+[0.445s] copying /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd/can_node_hybrid.py -> /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd
+[0.446s] copying /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd/read_csv.py -> /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd
+[0.446s] copying /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd/can_use.py -> /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd
+[0.446s] copying /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd/utils.py -> /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd
+[0.446s] copying /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd/publish_trajectory_node.py -> /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd
+[0.446s] copying /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd/visualization_node.py -> /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd
+[0.446s] copying /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd/hybrid_follow_node.py -> /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd
+[0.446s] copying /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd/switch_trajectory.py -> /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd
+[0.446s] copying /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd/lane_change_vx.py -> /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd
+[0.446s] copying /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd/follow_node.py -> /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd
+[0.446s] copying /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd/follow_demo_2025.py -> /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd
+[0.446s] copying /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd/mpc_node_v2.py -> /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd
+[0.446s] copying /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd/follow_demo_mpc_bank.py -> /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd
+[0.446s] copying /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd/can_node.py -> /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd
+[0.446s] copying /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd/lane_change.py -> /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd
+[0.446s] copying /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd/__init__.py -> /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd
+[0.446s] copying /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd/adjust_trajectory_node.py -> /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd
+[0.446s] byte-compiling /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd/can_node_hybrid.py to can_node_hybrid.cpython-310.pyc
+[0.447s] byte-compiling /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd/read_csv.py to read_csv.cpython-310.pyc
+[0.447s] byte-compiling /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd/can_use.py to can_use.cpython-310.pyc
+[0.448s] byte-compiling /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd/utils.py to utils.cpython-310.pyc
+[0.448s] byte-compiling /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd/publish_trajectory_node.py to publish_trajectory_node.cpython-310.pyc
+[0.449s] byte-compiling /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd/visualization_node.py to visualization_node.cpython-310.pyc
+[0.450s] byte-compiling /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd/hybrid_follow_node.py to hybrid_follow_node.cpython-310.pyc
+[0.451s] byte-compiling /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd/switch_trajectory.py to switch_trajectory.cpython-310.pyc
+[0.452s] byte-compiling /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd/lane_change_vx.py to lane_change_vx.cpython-310.pyc
+[0.453s] byte-compiling /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd/follow_node.py to follow_node.cpython-310.pyc
+[0.453s] byte-compiling /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd/follow_demo_2025.py to follow_demo_2025.cpython-310.pyc
+[0.455s] byte-compiling /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd/mpc_node_v2.py to mpc_node_v2.cpython-310.pyc
+[0.455s] byte-compiling /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd/follow_demo_mpc_bank.py to follow_demo_mpc_bank.cpython-310.pyc
+[0.457s] byte-compiling /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd/can_node.py to can_node.cpython-310.pyc
+[0.457s] byte-compiling /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd/lane_change.py to lane_change.cpython-310.pyc
+[0.458s] byte-compiling /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd/__init__.py to __init__.cpython-310.pyc
+[0.459s] byte-compiling /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd/adjust_trajectory_node.py to adjust_trajectory_node.cpython-310.pyc
+[0.460s] running install_data
+[0.460s] copying resource/follow_traj_wd -> /home/renth/mpc_ws/install/follow_traj_wd/share/ament_index/resource_index/packages
+[0.460s] copying package.xml -> /home/renth/mpc_ws/install/follow_traj_wd/share/follow_traj_wd
+[0.460s] running install_egg_info
+[0.460s] removing '/home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd-0.0.0-py3.10.egg-info' (and everything under it)
+[0.461s] Copying ../../../build/follow_traj_wd/follow_traj_wd.egg-info to /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd-0.0.0-py3.10.egg-info
+[0.461s] running install_scripts
+[0.471s] Installing adjust_trajectory script to /home/renth/mpc_ws/install/follow_traj_wd/lib/follow_traj_wd
+[0.471s] Installing can_node script to /home/renth/mpc_ws/install/follow_traj_wd/lib/follow_traj_wd
+[0.471s] Installing follow_node script to /home/renth/mpc_ws/install/follow_traj_wd/lib/follow_traj_wd
+[0.471s] Installing hybrid_follow_node script to /home/renth/mpc_ws/install/follow_traj_wd/lib/follow_traj_wd
+[0.471s] Installing mpc_follow_node script to /home/renth/mpc_ws/install/follow_traj_wd/lib/follow_traj_wd
+[0.471s] Installing publish_trajectory script to /home/renth/mpc_ws/install/follow_traj_wd/lib/follow_traj_wd
+[0.471s] Installing visualization_node script to /home/renth/mpc_ws/install/follow_traj_wd/lib/follow_traj_wd
+[0.471s] writing list of installed files to '/home/renth/mpc_ws/build/follow_traj_wd/install.log'
+[0.482s] Invoked command in '/home/renth/mpc_ws/src/demo1/follow_traj_wd' returned '0': CONDA_PROMPT_MODIFIER=(demo1) PYTHONPATH=/home/renth/mpc_ws/build/follow_traj_wd/prefix_override:/home/renth/anaconda3/envs/demo1/lib/python3.10/site-packages/colcon_core/task/python/colcon_distutils_commands:/home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages:${PYTHONPATH} /home/renth/anaconda3/envs/demo1/bin/python3.10 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../../build/follow_traj_wd build --build-base /home/renth/mpc_ws/build/follow_traj_wd/build install --record /home/renth/mpc_ws/build/follow_traj_wd/install.log --single-version-externally-managed install_data

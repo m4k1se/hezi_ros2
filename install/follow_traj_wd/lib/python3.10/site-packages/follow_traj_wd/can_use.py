@@ -1,41 +1,80 @@
 import can
 import logging
-from math import radians, cos, sin, asin, sqrt, degrees, atan2
+from math import  cos, sin, asin, sqrt, degrees, atan2
+from pyproj import CRS, Transformer
+import math
 
-class ISGSpeedFilter:
-    def __init__(self):
-        self.isg_sum_filtspd = 0  # 总和
-        self.isg_mot_spd_filt = 0  # 滤波后的速度
-        self.isg_mot_spd = 0  # 实时速度
-        self.MAT_Moto_spd = 0  # 最终输出的速度
+def normalize_angle(angle):
+    normalized_angle = angle % 360
+    if normalized_angle < 0:
+        normalized_angle += 360
+    return normalized_angle
 
-    def update_speed(self, isg_mot_spd):
-        self.isg_mot_spd = isg_mot_spd
-        self.isg_sum_filtspd += self.isg_mot_spd  # 加上当前速度
-        self.isg_sum_filtspd -= self.isg_mot_spd_filt  # 减去上一次的滤波结果
-        
-        # 计算滤波后的速度
-        self.isg_mot_spd_filt = self.isg_sum_filtspd / 15
-        self.MAT_Moto_spd = self.isg_mot_spd_filt  # 更新最终输出速度
 
-        return self.MAT_Moto_spd
+wgs84 = CRS("EPSG:4326")
+utm_zone_number = 50  # 根据实际情况选择合适的 UTM 区域
+utm_crs = CRS(f"EPSG:{32600 + utm_zone_number}")  # 例如，UTM Zone 50N 对应 EPSG:32650
+projector_to_utm = Transformer.from_crs(wgs84, utm_crs, always_xy=True)
+projector_to_wgs84 = Transformer.from_crs(utm_crs, wgs84, always_xy=True)
+def latlon_to_utm(lon, lat):
+    """将经纬度转换为 UTM 坐标"""
+    x, y = projector_to_utm.transform(lon, lat)
+    return x, y
+
+def smooth_yaw_iter(previous_yaw, new_yaw):
+    """
+    Smooth the yaw angle based on the previous yaw to ensure continuity.
+
+    :param previous_yaw: (float) Previous yaw angle in radians
+    :param new_yaw: (float) New yaw angle in radians (not yet normalized)
+    :return: (float) Smoothed and normalized yaw angle in radians within (-pi, pi]
+    """
+    dyaw = new_yaw - previous_yaw
+
+    # 调整 dyaw，使其在 [-pi, pi] 范围内
+    dyaw = (dyaw + np.pi) % (2.0 * np.pi) - np.pi
+
+    # 平滑后的 yaw
+    smoothed_yaw = previous_yaw + dyaw
+
+    return smoothed_yaw
+
+
+
 
 class Can_use:
-    def __init__(self, zone):
+    def __init__(self):
         self.bus_ins = can.interface.Bus(channel='can0', bustype='socketcan')
         self.bus_vcu = can.interface.Bus(channel='can1', bustype='socketcan')
         self.ego_lon = 31.8925019
         self.ego_lat = 118.8171577
-        self.ego_yaw = 270
+        self.ego_yaw_deg = 90
+        self.ego_yaw = math.radians(self.ego_yaw_deg)
         self.ego_v = 3
         self.ego_a = 0
         self.eps_mode = 2
         self.auto_driver_allowed = False
+        self.receive_flag = False
 
     def read_ins_info(self):
         """获取惯导的主车信息"""
         message_ins = self.bus_ins.recv()
         message_vcu = self.bus_vcu.recv()
+        
+        if message_vcu is not None and message_vcu.arbitration_id == 0x15C:
+            allow_value = message_vcu.data[2] & 0x01
+            self.auto_driver_allowed = (allow_value == 1)
+
+        if message_vcu is not None and message_vcu.arbitration_id == 0x124:
+            eps_mode = (message_vcu.data[6] >> 4) & 0x03
+            self.eps_mode = eps_mode
+            
+        if message_ins is None:
+            self.receive_flag = False
+            return
+        else :
+            self.receive_flag = True
+        
         if message_ins is not None and message_ins.arbitration_id == 0x504:
             # 直接获取数据字节
             can_data = message_ins.data
@@ -45,13 +84,15 @@ class Can_use:
             INS_Longitude = (can_data[4] << 24) | (can_data[5] << 16) | (can_data[6] << 8) | can_data[7]
             INS_Latitude = INS_Latitude * 0.0000001 - 180
             INS_Longitude = INS_Longitude * 0.0000001 - 180
-            print(f"INS_Latitude:{INS_Latitude},INS_Longitude:{INS_Longitude}")
+            # print(f"INS_Latitude:{INS_Latitude},INS_Longitude:{INS_Longitude}")
 
-            ego_x = INS_Longitude
-            ego_y = INS_Latitude
-            self.ego_lon = ego_x
-            self.ego_lat = ego_y
-            logging.info(f"ego_x:{ego_x},ego_y:{ego_y}")
+
+            self.ego_lon = INS_Longitude
+            self.ego_lat = INS_Latitude
+            ego_x, ego_y = latlon_to_utm(INS_Longitude, INS_Latitude)
+            self.ego_x = ego_x
+            self.ego_y = ego_y
+            # logging.info(f"ego_x:{ego_x},ego_y:{ego_y}")
 
         if message_ins is not None and message_ins.arbitration_id == 0x505:
             speed_data = message_ins.data
@@ -70,28 +111,39 @@ class Can_use:
                     
             speed =  sqrt(INS_EastSpd**2 + INS_NorthSpd**2 + INS_ToGroundSpd**2)
                     
-            self.ego_v = speed
+            self.ego_v = speed 
+            # self.ego_v = 2.7
 
         if message_ins is not None and message_ins.arbitration_id == 0x502:
             # self.ego_yaw = angle
             Angle_data = message_ins.data
             HeadingAngle =  (Angle_data[4] << 8) | Angle_data[5]
             HeadingAngle = HeadingAngle * 0.010986 - 360
-            self.ego_yaw = HeadingAngle 
+            self.ego_yaw_deg = HeadingAngle 
+            
+            # 将航向角从 INS 坐标系转换为 UTM 坐标系
+            # INS: 0° 正北，东为正
+            # UTM: 0° 正东，北为正
+            # 转换公式：UTM_yaw = 90 - INS_yaw
+            utm_yaw_deg = 90 - HeadingAngle
+            # print("utm yaw deg: ",utm_yaw_deg)
+            utm_yaw_deg = normalize_angle(utm_yaw_deg)               
+            
+            utm_yaw_rad = math.radians(utm_yaw_deg)
+            
+            # 平滑航向角
+            # smoothed_yaw = smooth_yaw_iter(self.previous_yaw, utm_yaw_rad)
+            smoothed_yaw_rad = utm_yaw_rad
+            self.previous_yaw_rad = smoothed_yaw_rad
+            self.ego_yaw_rad = smoothed_yaw_rad
+            
+            
         if message_ins is not None and message_ins.arbitration_id == 0x500:
             acc_data = message_ins.data
             # 北向速度
             ACC_X =  (acc_data[0] << 8) | acc_data[1]
             ACC_X =   (ACC_X * 0.0001220703125 - 4) * 9.8   # g
             self.ego_a = ACC_X
-        
-        if message_vcu is not None and message_vcu.arbitration_id == 0x15C:
-            allow_value = message_vcu.data[2] & 0x01
-            self.auto_driver_allowed = (allow_value == 1)
-
-        if message_vcu is not None and message_vcu.arbitration_id == 0x124:
-            eps_mode = (message_vcu.data[6] >> 4) & 0x03
-            self.eps_mode = eps_mode
 
     def publish_planner_action(self, action, id, action_type, mod, enable):
         """将规划动作发布到CAN"""
@@ -117,8 +169,8 @@ class Can_use:
             # Auto speed cmd（位3-7）
             # 首先对速度进行缩放和偏移
             # 期望速度 单位km/h
-            # desired_speed = action[0] 
-            desired_speed = 3
+            desired_speed = action[0] 
+            # desired_speed = 3
             speed_scaled = int(desired_speed) & 0x1F  # 取5位（位3-7）
             # 组合BYTE0
             byte0 = (speed_scaled << 3) | auto_drive_cmd_bits

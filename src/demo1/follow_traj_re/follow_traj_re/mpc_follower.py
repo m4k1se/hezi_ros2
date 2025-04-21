@@ -552,7 +552,23 @@ class MPCfollower:
             print(f"Fielterd Output - di:{self.di}, vi:{self.vi}")
     
         return self.vi, self.di
-     
+    
+    def cal_dec(self):
+        start_index = self.target_ind
+        end_index = min(self.target_ind + 20, len(self.ck))  # 确保不超过路径点总数
+
+        # 提取曲率值
+        curvature_values = self.ck[start_index:end_index]
+
+        # 计算平均曲率
+        if len(curvature_values) > 0:
+            average_curvature = sum(curvature_values) / len(curvature_values)
+        else:
+            average_curvature = 0.0  # 如果没有曲率值，返回 0
+
+        print(f"Average curvature from index {start_index} to {end_index}: {average_curvature}")
+        return average_curvature
+        
     def act(self, state):
         plt.cla()
         # self.GenerateLaneBorrow(data_cone, state)

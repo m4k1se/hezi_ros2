@@ -1,4 +1,4 @@
-#!/home/renth/anaconda3/envs/demo1/bin/python
+#!/home/renth/anaconda3/envs/demo1/bin/python3.10
 # EASY-INSTALL-ENTRY-SCRIPT: 'follow-traj-wd==0.0.0','console_scripts','follow_node'
 import re
 import sys

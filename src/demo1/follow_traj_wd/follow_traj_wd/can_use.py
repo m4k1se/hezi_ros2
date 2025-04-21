@@ -54,11 +54,27 @@ class Can_use:
         self.ego_a = 0
         self.eps_mode = 2
         self.auto_driver_allowed = False
+        self.receive_flag = False
 
     def read_ins_info(self):
         """获取惯导的主车信息"""
         message_ins = self.bus_ins.recv()
         message_vcu = self.bus_vcu.recv()
+        
+        if message_vcu is not None and message_vcu.arbitration_id == 0x15C:
+            allow_value = message_vcu.data[2] & 0x01
+            self.auto_driver_allowed = (allow_value == 1)
+
+        if message_vcu is not None and message_vcu.arbitration_id == 0x124:
+            eps_mode = (message_vcu.data[6] >> 4) & 0x03
+            self.eps_mode = eps_mode
+            
+        if message_ins is None:
+            self.receive_flag = False
+            return
+        else :
+            self.receive_flag = True
+        
         if message_ins is not None and message_ins.arbitration_id == 0x504:
             # 直接获取数据字节
             can_data = message_ins.data
@@ -128,14 +144,6 @@ class Can_use:
             ACC_X =  (acc_data[0] << 8) | acc_data[1]
             ACC_X =   (ACC_X * 0.0001220703125 - 4) * 9.8   # g
             self.ego_a = ACC_X
-        
-        if message_vcu is not None and message_vcu.arbitration_id == 0x15C:
-            allow_value = message_vcu.data[2] & 0x01
-            self.auto_driver_allowed = (allow_value == 1)
-
-        if message_vcu is not None and message_vcu.arbitration_id == 0x124:
-            eps_mode = (message_vcu.data[6] >> 4) & 0x03
-            self.eps_mode = eps_mode
 
     def publish_planner_action(self, action, id, action_type, mod, enable):
         """将规划动作发布到CAN"""

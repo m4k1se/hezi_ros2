@@ -39,8 +39,6 @@ class CanNode(Node):
         self.action_timer = self.create_timer(0.01, self.publish_frame)
 
     def timer_callback(self):
-        for i in range(15):
-            self.can_use.read_ins_info()
         vs_msg = Float32MultiArray()
         eps_msg = Int32()
         eps_msg.data = int(self.can_use.eps_mode)

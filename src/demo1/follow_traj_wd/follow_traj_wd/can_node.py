@@ -1,5 +1,5 @@
 import sys
-sys.path.append('/home/renth/hezi_ros2/src/demo1/follow_traj_wd/follow_traj_wd')
+sys.path.append('/home/renth/mpc_ws/src/demo1/follow_traj_wd/follow_traj_wd')
 import rclpy
 from rclpy.node import Node
 from can_use import Can_use
@@ -51,6 +51,9 @@ class CanNode(Node):
 
     def timer_callback(self):
         self.can_use.read_ins_info()
+        if not self.can_use.receive_flag:
+            self.get_logger().warn("未接收到惯导数据")
+            return
         vs_msg = Float32MultiArray()
         eps_msg = Int32()
         eps_msg.data = int(self.can_use.eps_mode)

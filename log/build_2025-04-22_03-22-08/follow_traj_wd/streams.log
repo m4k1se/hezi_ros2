@@ -1,0 +1,30 @@
+[0.308s] Invoking command in '/home/renth/mpc_ws/src/demo1/follow_traj_wd': CONDA_PROMPT_MODIFIER=(demo1) PYTHONPATH=/home/renth/mpc_ws/build/follow_traj_wd/prefix_override:/home/renth/anaconda3/envs/demo1/lib/python3.10/site-packages/colcon_core/task/python/colcon_distutils_commands:/home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages:${PYTHONPATH} /home/renth/anaconda3/envs/demo1/bin/python3.10 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../../build/follow_traj_wd build --build-base /home/renth/mpc_ws/build/follow_traj_wd/build install --record /home/renth/mpc_ws/build/follow_traj_wd/install.log --single-version-externally-managed install_data
+[0.415s] running egg_info
+[0.415s] writing ../../../build/follow_traj_wd/follow_traj_wd.egg-info/PKG-INFO
+[0.415s] writing dependency_links to ../../../build/follow_traj_wd/follow_traj_wd.egg-info/dependency_links.txt
+[0.415s] writing entry points to ../../../build/follow_traj_wd/follow_traj_wd.egg-info/entry_points.txt
+[0.415s] writing requirements to ../../../build/follow_traj_wd/follow_traj_wd.egg-info/requires.txt
+[0.416s] writing top-level names to ../../../build/follow_traj_wd/follow_traj_wd.egg-info/top_level.txt
+[0.416s] reading manifest file '../../../build/follow_traj_wd/follow_traj_wd.egg-info/SOURCES.txt'
+[0.417s] writing manifest file '../../../build/follow_traj_wd/follow_traj_wd.egg-info/SOURCES.txt'
+[0.417s] running build
+[0.417s] running build_py
+[0.417s] copying follow_traj_wd/follow_demo_mpc_bank.py -> /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd
+[0.417s] running install
+[0.417s] running install_lib
+[0.418s] copying /home/renth/mpc_ws/build/follow_traj_wd/build/lib/follow_traj_wd/follow_demo_mpc_bank.py -> /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd
+[0.418s] byte-compiling /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd/follow_demo_mpc_bank.py to follow_demo_mpc_bank.cpython-310.pyc
+[0.421s] running install_data
+[0.421s] running install_egg_info
+[0.421s] removing '/home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd-0.0.0-py3.10.egg-info' (and everything under it)
+[0.422s] Copying ../../../build/follow_traj_wd/follow_traj_wd.egg-info to /home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd-0.0.0-py3.10.egg-info
+[0.422s] running install_scripts
+[0.431s] Installing adjust_trajectory script to /home/renth/mpc_ws/install/follow_traj_wd/lib/follow_traj_wd
+[0.432s] Installing can_node script to /home/renth/mpc_ws/install/follow_traj_wd/lib/follow_traj_wd
+[0.432s] Installing follow_node script to /home/renth/mpc_ws/install/follow_traj_wd/lib/follow_traj_wd
+[0.432s] Installing hybrid_follow_node script to /home/renth/mpc_ws/install/follow_traj_wd/lib/follow_traj_wd
+[0.432s] Installing mpc_follow_node script to /home/renth/mpc_ws/install/follow_traj_wd/lib/follow_traj_wd
+[0.432s] Installing publish_trajectory script to /home/renth/mpc_ws/install/follow_traj_wd/lib/follow_traj_wd
+[0.432s] Installing visualization_node script to /home/renth/mpc_ws/install/follow_traj_wd/lib/follow_traj_wd
+[0.432s] writing list of installed files to '/home/renth/mpc_ws/build/follow_traj_wd/install.log'
+[0.443s] Invoked command in '/home/renth/mpc_ws/src/demo1/follow_traj_wd' returned '0': CONDA_PROMPT_MODIFIER=(demo1) PYTHONPATH=/home/renth/mpc_ws/build/follow_traj_wd/prefix_override:/home/renth/anaconda3/envs/demo1/lib/python3.10/site-packages/colcon_core/task/python/colcon_distutils_commands:/home/renth/mpc_ws/install/follow_traj_wd/lib/python3.10/site-packages:${PYTHONPATH} /home/renth/anaconda3/envs/demo1/bin/python3.10 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../../build/follow_traj_wd build --build-base /home/renth/mpc_ws/build/follow_traj_wd/build install --record /home/renth/mpc_ws/build/follow_traj_wd/install.log --single-version-externally-managed install_data
