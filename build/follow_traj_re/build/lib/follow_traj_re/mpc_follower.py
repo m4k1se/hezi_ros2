@@ -28,7 +28,7 @@ NU = 2  # a = [accel, steer]
 T = 30  # horizon length
 
 # mpc parameters
-R = np.diag([0.01, 0.01])  # input cost matrix
+R = np.diag([0.1, 0.1])  # input cost matrix
 Rd = np.diag([0.01, 1.0])  # input difference cost matrix
 Q = np.diag([1.0, 1.0, 0.5, 0.5])  # state cost matrix
 Qf = Q  # state final matrix
@@ -43,7 +43,7 @@ DU_TH = 0.1  # iteration finish param
 TARGET_SPEED = 10.0 / 3.6  # [m/s] target speed
 N_IND_SEARCH = 10  # Search index number
 
-DT = 0.5  # [s] time tick
+DT = 0.12  # [s] time tick
 
 # Vehicle parameters
 LENGTH = 4.5  # [m]
@@ -244,7 +244,7 @@ class MPCfollower:
         self.state.v = state.v
         self.state.predelta = 0
         self.target_ind, _ = self.calc_nearest_index(self.state, 0)
-        print("self target indx",  self.target_ind)
+        # print("self target indx",  self.target_ind)
     
     def smooth_yaw(self, yaw):
         for i in range(len(yaw) - 1):
@@ -472,7 +472,7 @@ class MPCfollower:
             odelta = get_nparray_from_matrix(u.value[1, :])
 
         else:
-            print("Error: Cannot solve mpc..")
+            # print("Error: Cannot solve mpc..")
             oa, odelta, ox, oy, oyaw, ov = None, None, None, None, None, None
             
         return oa, odelta, ox, oy, oyaw, ov
@@ -485,7 +485,7 @@ class MPCfollower:
             update_turn_angle = self.previous_turn_angle - self.max_turn_rate
         else:
             update_turn_angle = turn_angle
-        print(f"input:{turn_angle}======>update:{update_turn_angle}")
+        # print(f"input:{turn_angle}======>update:{update_turn_angle}")
         self.previous_turn_angle = update_turn_angle
         return update_turn_angle
     
@@ -512,17 +512,17 @@ class MPCfollower:
         self.oa, self.odelta, ox, oy, oyaw, ov = self.iterative_linear_mpc_control(
             xref, x0, dref, self.oa, self.odelta)
         
-        # print("x0:         ", x0)
-        # print("ox:         ", ox)
-        # print("x reference:", xref[0])
-        # print("oy: ", oy)
-        # print("y reference:", xref[1])
-        # print("oyaw: ", oyaw)
-        # print("yaw reference:", xref[3])
-        # print("ov: ", ov)
-        # print("v reference:", xref[2])
-        # print("o delt",self.odelta)
-        # print("delta reference:", dref[1])
+        print("x0:         ", x0)
+        print("ox:         ", ox)
+        print("x reference:", xref[0])
+        print("oy: ", oy)
+        print("y reference:", xref[1])
+        print("oyaw: ", oyaw)
+        print("yaw reference:", xref[3])
+        print("ov: ", ov)
+        print("v reference:", xref[2])
+        print("o delt",self.odelta)
+        print("delta reference:", dref[1])
         
         plt.plot(ox, oy, c='r')
         plt.plot(self.cx, self.cy, c='g')
@@ -534,21 +534,22 @@ class MPCfollower:
         
         if self.odelta is not None:
             self.di, self.ai = self.odelta[0], self.oa[0]
+            self.vi = ov[0]
             self.di = self.normalize_angle_rad(self.di)
             print(f"MPC Output - di: {self.di}, ai: {self.ai}")
-            self.di = max((min(self.di, MAX_STEER)), -MAX_STEER)
+            # self.di = max((min(self.di, MAX_STEER)), -MAX_STEER)
                         
-            # di_deg = math.degrees(self.di)
-            # di_deg = convert_angle(di_deg)
-            # if di_deg*WHEEL_FACTOR > 460:
-            #     turn_angle = 460
-            # elif di_deg*WHEEL_FACTOR < -460:
-            #     turn_angle = -460
-            # else: 
-            #     turn_angle = di_deg * WHEEL_FACTOR
-            # self.di = self.smooth_turn_angle(-turn_angle)
+            di_deg = math.degrees(self.di)
+            di_deg = convert_angle(di_deg)
+            if di_deg*WHEEL_FACTOR > 460:
+                turn_angle = 460
+            elif di_deg*WHEEL_FACTOR < -460:
+                turn_angle = -460
+            else: 
+                turn_angle = di_deg * WHEEL_FACTOR
+            self.di = self.smooth_turn_angle(-turn_angle)
             
-            # print(f"Fielterd Output - di:{self.di}, ai:{self.ai}")
+            print(f"Fielterd Output - di:{self.di}, ai:{self.ai}")
     
         return self.ai, self.di
      
@@ -591,7 +592,7 @@ def main():
 
 
     elapsed_time = time.time() - start
-    print(f"calc time:{elapsed_time:.6f} [sec]")
+    # print(f"calc time:{elapsed_time:.6f} [sec]")
 
 
 if __name__ == '__main__':

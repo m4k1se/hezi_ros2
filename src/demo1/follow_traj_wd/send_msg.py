@@ -36,7 +36,7 @@ def main():
         send_message(bus_ins, 0x505, data_505)
 
         # 航向角（0x502）
-        heading = int((270 + 360) / 0.010986)
+        heading = int((-92.27118000000002 + 360) / 0.010986)
         data_502 = [0, 0, 0, 0, (heading >> 8) & 0xFF, heading & 0xFF, 0, 0]
         send_message(bus_ins, 0x502, data_502)
 

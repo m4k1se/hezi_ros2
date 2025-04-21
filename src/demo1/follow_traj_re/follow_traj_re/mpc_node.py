@@ -95,12 +95,13 @@ class FollowNode(Node):
             self.manual_triggered = False
         if self.mode_AE == 1 and self.mode_666 == 1:
             if x is not None and y is not None:
-                acc, turn_angle = self.follower.act(state)
+                velocity, turn_angle = self.follower.act(state)
                 self.follower.update_target_index(state)
                 filtered_angle = self.filter.update_speed(turn_angle)
+                filtered_velocity = self.filter.update_speed(velocity)
                 logging.info(f'trun angle: {turn_angle}, filter angle: {filtered_angle}')
-                filtered_angle = self.filter.update_speed(turn_angle)
-                self.frame = [5.0, 
+                logging.info(f'velocity : {velocity}, filter velocity: {filtered_velocity}')
+                self.frame = [float(filtered_velocity), 
                               float(filtered_angle), 
                               0.0]
                 planner_frame = Float32MultiArray()

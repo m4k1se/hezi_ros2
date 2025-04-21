@@ -102,7 +102,7 @@ class FollowNode(Node):
                 filtered_angle = self.filter.update_speed(turn_angle)
                 self.frame = [5.0, 
                               float(filtered_angle), 
-                              0.0]
+                              float(acc)]
                 planner_frame = Float32MultiArray()
                 planner_frame.data = self.frame
                 self.get_logger().info(f"[vs_callback] Send frame: {planner_frame.data}")

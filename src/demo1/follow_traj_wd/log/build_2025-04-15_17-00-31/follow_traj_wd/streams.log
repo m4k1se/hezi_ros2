@@ -1,0 +1,27 @@
+[0.305s] Invoking command in '/home/renth/hezi_ros2/src/demo1/follow_traj_wd': CONDA_PROMPT_MODIFIER=(demo1) PYTHONPATH=/home/renth/hezi_ros2/src/demo1/follow_traj_wd/build/follow_traj_wd/prefix_override:/home/renth/anaconda3/envs/demo1/lib/python3.10/site-packages/colcon_core/task/python/colcon_distutils_commands:/home/renth/hezi_ros2/src/demo1/follow_traj_wd/install/follow_traj_wd/lib/python3.10/site-packages:${PYTHONPATH} /home/renth/anaconda3/envs/demo1/bin/python -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base build/follow_traj_wd build --build-base /home/renth/hezi_ros2/src/demo1/follow_traj_wd/build/follow_traj_wd/build install --record /home/renth/hezi_ros2/src/demo1/follow_traj_wd/build/follow_traj_wd/install.log --single-version-externally-managed install_data
+[0.413s] running egg_info
+[0.414s] writing build/follow_traj_wd/follow_traj_wd.egg-info/PKG-INFO
+[0.414s] writing dependency_links to build/follow_traj_wd/follow_traj_wd.egg-info/dependency_links.txt
+[0.414s] writing entry points to build/follow_traj_wd/follow_traj_wd.egg-info/entry_points.txt
+[0.414s] writing requirements to build/follow_traj_wd/follow_traj_wd.egg-info/requires.txt
+[0.414s] writing top-level names to build/follow_traj_wd/follow_traj_wd.egg-info/top_level.txt
+[0.415s] reading manifest file 'build/follow_traj_wd/follow_traj_wd.egg-info/SOURCES.txt'
+[0.415s] writing manifest file 'build/follow_traj_wd/follow_traj_wd.egg-info/SOURCES.txt'
+[0.415s] running build
+[0.415s] running build_py
+[0.416s] running install
+[0.416s] running install_lib
+[0.417s] running install_data
+[0.417s] running install_egg_info
+[0.417s] removing '/home/renth/hezi_ros2/src/demo1/follow_traj_wd/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd-0.0.0-py3.10.egg-info' (and everything under it)
+[0.418s] Copying build/follow_traj_wd/follow_traj_wd.egg-info to /home/renth/hezi_ros2/src/demo1/follow_traj_wd/install/follow_traj_wd/lib/python3.10/site-packages/follow_traj_wd-0.0.0-py3.10.egg-info
+[0.418s] running install_scripts
+[0.428s] Installing adjust_trajectory script to /home/renth/hezi_ros2/src/demo1/follow_traj_wd/install/follow_traj_wd/lib/follow_traj_wd
+[0.428s] Installing can_node script to /home/renth/hezi_ros2/src/demo1/follow_traj_wd/install/follow_traj_wd/lib/follow_traj_wd
+[0.428s] Installing follow_node script to /home/renth/hezi_ros2/src/demo1/follow_traj_wd/install/follow_traj_wd/lib/follow_traj_wd
+[0.428s] Installing hybrid_follow_node script to /home/renth/hezi_ros2/src/demo1/follow_traj_wd/install/follow_traj_wd/lib/follow_traj_wd
+[0.428s] Installing mpc_follow_node script to /home/renth/hezi_ros2/src/demo1/follow_traj_wd/install/follow_traj_wd/lib/follow_traj_wd
+[0.428s] Installing publish_trajectory script to /home/renth/hezi_ros2/src/demo1/follow_traj_wd/install/follow_traj_wd/lib/follow_traj_wd
+[0.428s] Installing visualization_node script to /home/renth/hezi_ros2/src/demo1/follow_traj_wd/install/follow_traj_wd/lib/follow_traj_wd
+[0.428s] writing list of installed files to '/home/renth/hezi_ros2/src/demo1/follow_traj_wd/build/follow_traj_wd/install.log'
+[0.439s] Invoked command in '/home/renth/hezi_ros2/src/demo1/follow_traj_wd' returned '0': CONDA_PROMPT_MODIFIER=(demo1) PYTHONPATH=/home/renth/hezi_ros2/src/demo1/follow_traj_wd/build/follow_traj_wd/prefix_override:/home/renth/anaconda3/envs/demo1/lib/python3.10/site-packages/colcon_core/task/python/colcon_distutils_commands:/home/renth/hezi_ros2/src/demo1/follow_traj_wd/install/follow_traj_wd/lib/python3.10/site-packages:${PYTHONPATH} /home/renth/anaconda3/envs/demo1/bin/python -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base build/follow_traj_wd build --build-base /home/renth/hezi_ros2/src/demo1/follow_traj_wd/build/follow_traj_wd/build install --record /home/renth/hezi_ros2/src/demo1/follow_traj_wd/build/follow_traj_wd/install.log --single-version-externally-managed install_data

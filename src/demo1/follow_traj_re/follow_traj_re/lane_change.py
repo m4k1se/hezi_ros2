@@ -90,10 +90,10 @@ class LaneChangeDecider():
     
     def publish_new_refline(self):
         if len(self.obs_list) == 0:
-            print("No obs in the scene")
+            # print("No obs in the scene")
             self.planning = False
         else:
-            print("Obs in the scene")
+            # print("Obs in the scene")
             data_cone = self.obs_df.sort_values(by='dis', ascending=True)
             ## 以data_cone的x坐标和y坐标画图
             # plt.plot(data_cone["x"], data_cone["y"], "r", label="Cone coords")
@@ -101,8 +101,8 @@ class LaneChangeDecider():
             data_cone["utm_coords"] = data_cone.apply(lambda row: self.localxy2utm([row['x'], row['y'], 0, 0], self.state), axis=1)
             data_cone["utm_x"] = data_cone["utm_coords"].apply(lambda x: x[0])
             data_cone["utm_y"] = data_cone["utm_coords"].apply(lambda x: x[1])
-            print("utm_x:", data_cone["utm_x"])
-            print("utm_y:", data_cone["utm_y"])
+            # print("utm_x:", data_cone["utm_x"])
+            # print("utm_y:", data_cone["utm_y"])
             data_cone["utm_yaw"] = data_cone["utm_coords"].apply(lambda x: x[2])
             # 画出utm坐标系下的cone
             plt.scatter(data_cone["utm_x"], data_cone["utm_y"], c="b", linewidth=10, label="Cone utm coords")       
